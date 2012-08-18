@@ -2,6 +2,7 @@
 import datetime
 from django.contrib.auth.models import User
 from django.db import models
+import math
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
 
@@ -69,6 +70,10 @@ class Hero(models.Model):
 
 
     def save(self, *args, **kwargs):
+        self.attack_github = 1 + math.ceil(self.public_repos/2.0) + math.ceil(self.followers/2.0)
+        self.defence_github = self.public_repos + math.ceil(self.public_gists/2.0)
+        self.attentiveness_github = 1 + self.following + math.ceil(self.followers/2.0)
+        self.charm_github = self.followers + (1 if self.hireable else 0)
 
         super(Hero, self).save(*args, **kwargs)
 
