@@ -74,6 +74,9 @@ class Hero(models.Model):
     def get_total_power(self):
         return self.power+self.army_power
 
+    def in_battle_queue(self):
+        return BattleQueue.objects.filter(hero=self).count() > 0
+
     def update_from_response(self, response):
         """updates hero with info from auth response"""
         for key, val in response.items():
