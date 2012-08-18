@@ -209,9 +209,18 @@ class Unit(models.Model):
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
+        UNIT_PROP_LIMIT = 20
+        PROPS_MAX = {
+            'forks': 5000,
+            'watchers': 17000,
+            'open_issues': 600,
+        }
         for key, val in response.items():
             if key != 'id' and not val is None and hasattr(self, key):
-                setattr(self, key, val)
+                if key in PROPS_MAX:
+                    setattr(self, key, formulas.scale_prop(val, UNIT_PROP_LIMIT, PROPS_MAX[key]))
+                else:
+                    setattr(self, key, val)
 
     def save(self, *args, **kwargs):
         self.attack_github = math.ceil(self.forks/2.0)
