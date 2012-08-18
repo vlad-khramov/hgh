@@ -1,6 +1,7 @@
 #coding: utf-8
-from django.shortcuts import render, get_object_or_404
-from apps.main.models import Hero
+from django.shortcuts import render, get_object_or_404, redirect
+from apps.main.models import Hero, BattleQueue
+import datetime
 
 
 def home(request):
@@ -32,3 +33,14 @@ def profile(request):
 def info(request, login=''):
     hero = get_object_or_404(Hero, login=login)
     return render(request, 'main/info.html', {'hero': hero})
+
+
+def prebattle(request):
+
+    return render(request, 'main/prebattle.html', {})
+
+def battle(request):
+    return render(request, 'main/battle.html',{'hero':request.user.hero})
+
+def postbattle(request):
+    return render(request, 'main/postbattle.html',{'hero':request.user.hero})

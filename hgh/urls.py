@@ -22,6 +22,10 @@ urlpatterns = patterns('',
     url(r'^rating/$', 'apps.main.views.rating', name='rating'),
     url(r'^profile/$', 'apps.main.views.profile', name='profile'),
 
+    url(r'^fight/$', 'apps.main.views.prebattle', name='prebattle'),
+    url(r'^battle/$', 'apps.main.views.battle', name='battle'),
+    url(r'^battleresult/$', 'apps.main.views.postbattle', name='postbattle'),
+
     url(r'^info/(?P<login>[^/]+)/$', 'apps.main.views.info', name='info'),
 
 
