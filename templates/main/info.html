@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load unitline %}
 
 {% block content %}
     <div class="row">
@@ -17,6 +18,8 @@
         </div>
     </div>
     <div class="row">
-
+        {% for unit in hero.units.all %}
+            {% unitline unit %}<br>
+        {% endfor %}
     </div>
 {% endblock %}
