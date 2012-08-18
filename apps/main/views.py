@@ -76,6 +76,17 @@ def prebattle(request):
 
 @login_required
 def battle(request):
+    battle = request.user.hero.get_battle()
+    if battle is None:
+        return redirect('profile')
+
+    if 'runaway' in request.GET:
+        battle.is_active=False
+        battle.winner = battle.get_opponent(request.user.hero)
+        battle.save()
+
+        return redirect('profile')
+
     return render(request, 'main/battle.html',{'hero':request.user.hero})
 
 @login_required
