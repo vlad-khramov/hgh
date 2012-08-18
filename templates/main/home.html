@@ -6,7 +6,7 @@
 {% block content %}
 
     <div class="row">
-        <div class="span5" style="text-align: center;">
+        <div class="span6" style="text-align: center;">
             Heroes of Git and hub is game where you becomes a hero and your repositories in <a href="http://github.com">Github</a> transforms to your army.
             {% if not user.is_authenticated %}
                 <br><br>
@@ -21,20 +21,22 @@
                 <colgroup>
                     <col width="20">
                     <col>
+                    <col width="30">
                 </colgroup>
                 {% for hero in rating_exp %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{% hero hero %}</td>
+                        <td>{{ hero.experience }}</td>
                     </tr>
                 {% endfor %}
             </table>
 
             <div>
-                <a class="right" href="{% url rating %}">All rating &rarr;</a>
+                <a class="right" href="{% url rating_exp %}">All rating &rarr;</a>
             </div>
         </div>
-        <div class="span4">
+        <div class="span3">
             <h2>Rating by power</h2>
 
             <table class="table">
@@ -52,7 +54,7 @@
                 {% endfor %}
             </table>
             <div>
-                <a class="right" href="{% url rating %}">All rating &rarr;</a>
+                <a class="right" href="{% url rating_pow %}">All rating &rarr;</a>
             </div>
         </div>
     </div>
