@@ -80,3 +80,23 @@ class Unit(models.Model):
     defence_github = models.IntegerField()
     attentiveness_github = models.IntegerField()
     charm_github = models.IntegerField()
+
+    def _get_stat(self, stat):
+        """returns total value of stat by its name"""
+        return getattr(self, stat+'_github') + getattr(self.hero, 'get_'+stat)()
+
+    def get_attack(self):
+        """returns total hero attack"""
+        return self._get_stat('attack')
+
+    def get_defence(self):
+        """returns total hero defence"""
+        return self._get_stat('defence')
+
+    def get_attentiveness(self):
+        """returns total hero attentiveness"""
+        return self._get_stat('attentiveness')
+
+    def get_charm(self):
+        """returns total hero charm"""
+        return self._get_stat('charm')

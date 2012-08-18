@@ -1,16 +1,31 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from apps.main.models import Hero, Unit
 
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
+
+    def setUp(self):
+        self.hero = Hero(
+            attack_github = 2,
+            attack_own = 3
+        )
+
+    def test_hero_stats(self):
         """
-        Tests that 1 + 1 always equals 2.
+        tests correct getting stats of hero
         """
-        self.assertEqual(1 + 1, 2)
+        assert self.hero.get_attack() == 5
+
+
+    def test_unit_stats(self):
+        """
+        tests correct getting stats of hero
+        """
+        unit = Unit(
+            hero = self.hero,
+            attack_github = 4
+        )
+
+        assert unit.get_attack() == 9
+
+
