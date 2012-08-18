@@ -219,6 +219,20 @@ class BattleQueue(models.Model):
     hero = models.ForeignKey(Hero)
     date = models.DateTimeField()
 
+class Battle(models.Model):
+    """battle betwen two heroes"""
+
+    hero1 = models.ForeignKey(Hero, related_name='battles1')
+    hero2 = models.ForeignKey(Hero, related_name='battles2')
+
+    hero1_moved = models.BooleanField(default=False)
+    hero2_moved = models.BooleanField(default=False)
+
+    date = models.DateTimeField()
+
+    is_active = models.BooleanField()
+    round = models.SmallIntegerField(default=1)
+    winner = models.ForeignKey(Hero, related_name='winned_battles')
 
 
 
