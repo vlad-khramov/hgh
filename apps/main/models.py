@@ -5,6 +5,9 @@ from django.db import models
 class Hero(models.Model):
     user = models.ForeignKey(User)
 
+    login = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+
     avatar_url = models.URLField()
     html_url = models.URLField()
     blog = models.URLField()
@@ -33,3 +36,23 @@ class Hero(models.Model):
     experience = models.IntegerField()
 
     last_update = models.CharField(max_length=100)
+
+    def _get_stat(self, stat):
+        """returns total value of stat by its name"""
+        return getattr(self, stat+'_own')+getattr(self, stat+'_github')
+
+    def get_attack(self):
+        """returns total hero attack"""
+        return self._get_stat('attack')
+
+    def get_defence(self):
+        """returns total hero defence"""
+        return self._get_stat('defence')
+
+    def get_attentiveness(self):
+        """returns total hero attentiveness"""
+        return self._get_stat('attentiveness')
+
+    def get_charm(self):
+        """returns total hero charm"""
+        return self._get_stat('charm')
