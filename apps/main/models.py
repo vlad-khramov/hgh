@@ -3,9 +3,10 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 import math
+import operator
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
-from apps.helpers import gh
+from apps.helpers import gh, formulas
 
 class Hero(models.Model):
     """Hero, based on github account of user"""
@@ -69,12 +70,41 @@ class Hero(models.Model):
             if key != 'id' and not val is None  and hasattr(self, key):
                 setattr(self, key, val)
 
+    def update_race(self):
+        """updates race of hero (most popular race from units)"""
+        if self.race: return
+
+        if Unit.objects.filter(hero=self).count()==0:
+            self.race = 'human'
+
+        units = Unit.objects.filter(hero=self)
+
+        races = dict()
+        for unit in units:
+            if unit.race in races:
+                races[unit.race] += 1
+            else:
+                races[unit.race] = 1
+
+        self.race = sorted(races.iteritems(), key=lambda (k,v): (v,k))[0][0]
+        self.save()
+
+
+
+
     def update_army(self):
-        """updates army of hero with info of repositories in github"""
+        """
+        updates army of hero with info of repositories in github
+        if user hasn't repository, he get a unit Dummy
+        """
         #todo: check for battle
         repos = gh.get_repos(self.login)
         if not repos:
-            return
+            if Unit.objects.filter(hero=self).count()>0:
+                return
+            else:
+                Unit(hero=self, name = 'Dummy').save()
+                return
 
         Unit.objects.filter(hero=self).delete()
 
@@ -82,8 +112,6 @@ class Hero(models.Model):
             unit = Unit(hero=self)
             unit.update_from_response(repo)
             unit.save()
-
-
 
 
     def save(self, *args, **kwargs):
@@ -150,6 +178,8 @@ class Unit(models.Model):
         self.attentiveness_github = math.ceil(self.watchers/2.0)
         self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.open_issues/4.0)
 
+        self.race = formulas.lang_to_race(self.language)
+
         super(Unit, self).save(*args, **kwargs)
 
 class Spell(models.Model):
@@ -177,6 +207,8 @@ def social_auth_update_user(sender, user, response, details, **kwargs):
 
     if created:
         hero.update_army()
+        hero.update_race()
+
 
     return True
 
