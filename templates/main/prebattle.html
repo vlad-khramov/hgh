@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="row center">
+        <h2>Waiting for opponents..</h2>
+        <br><br>
+        <a href="{% url prebattle %}" class="btn btn-large">Refresh</a>
+        <a href="{% url prebattle %}?cancel" class="btn btn-large">Cancel</a>
+    </div>
+
+
+{% endblock %}

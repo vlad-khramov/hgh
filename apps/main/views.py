@@ -1,6 +1,6 @@
 #coding: utf-8
 from django.shortcuts import render, get_object_or_404, redirect
-from apps.main.models import Hero, BattleQueue
+from apps.main.models import Hero, BattleQueue, Battle
 import datetime
 
 
@@ -36,6 +36,35 @@ def info(request, login=''):
 
 
 def prebattle(request):
+
+    try:
+        opponent = BattleQueue.objects.exclude(hero=request.user.hero)[0].hero
+        #opponent exists, start battle
+        battle = Battle(
+            hero1=request.user.hero,
+            hero2=opponent,
+            date=datetime.datetime.now(),
+            is_active=True
+        )
+        battle.save()
+        BattleQueue.objects.filter(hero__in=[request.user.hero, opponent]).delete()
+
+        return redirect('battle')
+    except Exception:
+        pass
+
+
+
+    try:
+        battle_queue = BattleQueue.objects.get(hero=request.user.hero)
+    except Exception:
+        battle_queue = BattleQueue(hero=request.user.hero, date=datetime.datetime.now())
+        battle_queue.save()
+
+    if 'cancel' in request.GET:
+        battle_queue.delete()
+        return redirect('profile')
+
 
     return render(request, 'main/prebattle.html', {})
 
