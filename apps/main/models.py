@@ -120,7 +120,7 @@ class Hero(models.Model):
             self.race = 'human'
         else:
             units = Unit.objects.filter(hero=self)
-            self.race = Counter(units).most_common()[0][0]
+            self.race = Counter([unit.race for unit in units]).most_common()[0][0]
         for stat, value in formulas.race_bonuses(self.race).items():
             setattr(self, stat+'_own', getattr(self, stat+'_own')+value)
 
