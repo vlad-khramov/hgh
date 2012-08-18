@@ -15,6 +15,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^login/$', 'apps.main.views.login', name='login'),
 
     url(r'^$', 'apps.main.views.home', name='home'),
+
+
+    url(r'', include('social_auth.urls')),
 )
