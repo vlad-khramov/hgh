@@ -44,10 +44,13 @@
                     {% navitem 'rating' 'Rating' %}
 
                     {% if user.is_authenticated %}
-                        {% navitem 'logout' 'logout' %}
+                        <li>
+                            <a href="{% url profile %}">{{ user.username}}</a>
+                        </li>
+                        {% navitem 'logout' 'Logout' %}
                     {% else %}
                         <li>
-                            <a href="{% url socialauth_begin 'github' %}">login with Github</a>
+                            <a href="{% url socialauth_begin 'github' %}">Login with Github</a>
                         </li>
                     {% endif %}
                 </ul>

@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'apps.main.views.home', name='home'),
     url(r'^rating/$', 'apps.main.views.rating', name='rating'),
+    url(r'^profile/$', 'apps.main.views.rating', name='profile'),
 
 
     url(r'', include('social_auth.urls')),
