@@ -7,9 +7,11 @@
 
     <div class="row">
         <div class="span5" style="text-align: center;">
-                Heroes of Git and hub is game where you becomes a hero and your repositories in <a href="http://github.com">Github</a> transforms to your army.
+            Heroes of Git and hub is game where you becomes a hero and your repositories in <a href="http://github.com">Github</a> transforms to your army.
+            {% if not user.is_authenticated %}
                 <br><br>
                 <a href="/login/github/" class="btn btn-large">Login with Github</a>
+            {% endif %}
 
         </div>
         <div class="span3">
