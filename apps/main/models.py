@@ -186,6 +186,9 @@ class Unit(models.Model):
 
         self.race = formulas.lang_to_race(self.language)
 
+        if not self.custom_name:
+            self.custom_name = self.name
+
         super(Unit, self).save(*args, **kwargs)
 
 class Spell(models.Model):
