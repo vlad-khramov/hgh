@@ -223,10 +223,10 @@ class Unit(models.Model):
                     setattr(self, key, val)
 
     def save(self, *args, **kwargs):
-        self.attack_github = math.ceil(self.forks/2.0)
-        self.defence_github = self.forks + math.ceil(self.watchers/4.0)
-        self.attentiveness_github = math.ceil(self.watchers/2.0)
-        self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.open_issues/4.0)
+        self.attack_github = int(self.forks/2)
+        self.defence_github = self.forks+int(self.watchers/4.0)
+        self.attentiveness_github = int(self.watchers/2.0)
+        self.charm_github = int(self.watchers/2)+int(self.open_issues/4.0)
 
         self.race = formulas.lang_to_race(self.language)
 
