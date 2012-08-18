@@ -5,5 +5,5 @@ def check_battle(func):
         if request.user.hero.in_battle():
             return redirect('battle')
         else:
-            return func(*args, **kwargs)
+            return func(request,*args, **kwargs)
     return wrapper
