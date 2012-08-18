@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load hero %}
 
 
 
@@ -13,6 +14,10 @@
         </div>
         <div class="span6">
             <h2>Rating</h2>
+
+            {% for hero in rating_exp %}
+                {{ forloop.counter }} {% hero hero %}
+            {% endfor %}
 
             <a class="right" href="{% url rating %}">All rating &rarr;</a>
         </div>
