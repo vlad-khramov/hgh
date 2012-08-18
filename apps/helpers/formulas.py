@@ -1,4 +1,13 @@
-
+def get_hit_chance(attack, defence, missRequired=True):
+    chance = 1
+    if attack>=defence:
+        if missRequired:
+            chance = 0.95
+    else:
+        chance = attack/defence
+    if chance<0.05:
+        chance = 0.05
+    return chance
 
 
 
