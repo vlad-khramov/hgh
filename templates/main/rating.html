@@ -1,12 +1,40 @@
 {% extends 'base.html' %}
+{% load hero %}
 
 
 {% block content %}
 
+
+
     <div class="row">
-        <div class="span12">
-            <h2>Rating</h2>
+        <div class="span6">
+            <h2>Rating by {{ type }}</h2>
+            {% include "paginator.html" %}
+            <table class="table">
+                <colgroup>
+                    <col width="20">
+                    <col>
+                    <col width="20">
+                </colgroup>
+                {% for hero in paginator.object_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{% hero hero %}</td>
+                        <td>
+                            {% ifequal type 'experience' %}
+                                {{ hero.experience }}
+                            {% else %}
+                                {{ hero.power }}
+                            {% endifequal %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% include "paginator.html" %}
         </div>
     </div>
+
+
 
 {% endblock %}

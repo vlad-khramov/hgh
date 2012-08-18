@@ -1,9 +1,11 @@
 #coding: utf-8
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from apps.main.decorators import check_battle
 from apps.main.models import Hero, BattleQueue, Battle
 import datetime
+from apps.simplepagination import simple_paginate
 
 
 def home(request):
@@ -25,9 +27,24 @@ def login(request):
 
     return render(request, 'main/login.html',{})
 
-def rating(request):
+def rating(request, type=''):
 
-    return render(request, 'main/rating.html',{})
+    if type=='experience':
+        heroes = Hero.objects.order_by('-experience')
+    elif type=='power':
+        heroes = Hero.objects.extra(
+            select={'total_power':'power + army_power'},
+            order_by=('-total_power',)
+        )
+    else:
+        raise Http404
+
+    paginator = simple_paginate(heroes, request, style='digg')
+
+    return render(request, 'main/rating.html', {
+        'paginator': paginator,
+        'type': type
+    })
 
 
 @login_required

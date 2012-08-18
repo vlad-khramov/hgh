@@ -41,13 +41,14 @@
             <div class="nav-collapse">
                 <ul class="nav pull-right">
 
-                    {% navitem 'rating' 'Rating' %}
+                    {% navitem 'rating_pow' 'Rating by power' %}
+                    {% navitem 'rating_exp' 'Rating by experience'%}
 
                     {% if user.is_authenticated %}
                         <li>
                             <a href="{% url profile %}"><img src="{{ user.hero.avatar_url }}" width="20" height="20"> {{ user.username}}</a>
                         </li>
-                        {% navitem 'logout' 'Logout' %}
+                        {% navitem 'logout' 'Logout'%}
                     {% else %}
                         <li>
                             <a href="{% url socialauth_begin 'github' %}">Login with Github</a>

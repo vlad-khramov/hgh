@@ -19,7 +19,8 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}, name='logout'),
 
     url(r'^$', 'apps.main.views.home', name='home'),
-    url(r'^rating/$', 'apps.main.views.rating', name='rating'),
+    url(r'^rating/experience/$', 'apps.main.views.rating', {'type':'experience'}, name='rating_exp'),
+    url(r'^rating/power/$', 'apps.main.views.rating', {'type':'power'}, name='rating_pow'),
     url(r'^profile/$', 'apps.main.views.profile', name='profile'),
 
     url(r'^fight/$', 'apps.main.views.prebattle', name='prebattle'),
