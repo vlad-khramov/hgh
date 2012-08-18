@@ -241,6 +241,14 @@ class Battle(models.Model):
     round = models.SmallIntegerField(default=1)
     winner = models.ForeignKey(Hero, related_name='winned_battles', null=True, default=None)
 
+    def get_opponent(self, hero):
+        if self.hero1==hero:
+            return self.hero2
+        elif self.hero2==hero:
+            return self.hero1
+        else:
+            return None
+
 
 
 
