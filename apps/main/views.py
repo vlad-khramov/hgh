@@ -1,4 +1,5 @@
 #coding: utf-8
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from apps.main.models import Hero, BattleQueue, Battle
 import datetime
@@ -27,6 +28,8 @@ def rating(request):
 
     return render(request, 'main/rating.html',{})
 
+
+@login_required
 def profile(request):
     return render(request, 'main/profile.html',{'hero':request.user.hero})
 
@@ -34,7 +37,7 @@ def info(request, login=''):
     hero = get_object_or_404(Hero, login=login)
     return render(request, 'main/info.html', {'hero': hero})
 
-
+@login_required
 def prebattle(request):
 
     try:
@@ -68,8 +71,10 @@ def prebattle(request):
 
     return render(request, 'main/prebattle.html', {})
 
+@login_required
 def battle(request):
     return render(request, 'main/battle.html',{'hero':request.user.hero})
 
+@login_required
 def postbattle(request):
     return render(request, 'main/postbattle.html',{'hero':request.user.hero})
