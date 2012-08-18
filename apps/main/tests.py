@@ -1,8 +1,13 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from apps.main.models import Hero, Unit
 
 
 class SimpleTest(TestCase):
+
+
+    def setUp(self):
+        self.user, created = User.objects.get_or_create(username='fakeuser', email='fake@pukkared.com', password='mypassword', first_name='fakename')
 
     def test_hero_stats(self):
         """
@@ -34,13 +39,14 @@ class SimpleTest(TestCase):
 
     def test_hero_update_race(self):
         """tests setting race based on race of units"""
-        hero = Hero()
-        Unit(hero=hero,race='human')
-        Unit(hero=hero,race='elf')
-        Unit(hero=hero,race='elf')
+        hero = Hero(user=self.user)
+        hero.save()
+        Unit(hero=hero,race='human').save()
+        Unit(hero=hero,race='elf').save()
+        Unit(hero=hero,race='elf').save()
 
         hero.update_race()
-        print hero.race
+
 
         assert hero.race == 'elf'
 
