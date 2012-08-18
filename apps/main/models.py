@@ -209,6 +209,17 @@ class Unit(models.Model):
 
         super(Unit, self).save(*args, **kwargs)
 
+
+
+class BattleQueue(models.Model):
+    """Queue of heroes, waiting battle"""
+    hero = models.ForeignKey(Hero)
+    date = models.DateTimeField()
+
+
+
+
+
 class Spell(models.Model):
     """a spell that `hero` can cast"""
 
