@@ -89,9 +89,22 @@ class Hero(models.Model):
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
-        for key, val in response.items():
-            if key != 'id' and not val is None  and hasattr(self, key):
-                setattr(self, key, val)
+        NO_MAX = 0
+        PROPS_MAX = {
+            'public_repos': 400,
+            'followers': 8000,
+            'following': 30,
+            'public_gists': 200,
+            'hireable': NO_MAX
+        }
+        HERO_PROP_LIMIT = 10
+        for key, val in response.iteritems():
+            if key != 'id' and not val is None and hasattr(self, key):
+                prop_max = PROPS_MAX.get(key, NO_MAX)
+                if prop_max==NO_MAX:
+                    setattr(self, key, val)
+                else:
+                    setattr(self, key, formulas.scale_prop(val, HERO_PROP_LIMIT, prop_max))
 
     def update_race(self):
         """
