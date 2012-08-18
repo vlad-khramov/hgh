@@ -1,7 +1,9 @@
 #coding: utf-8
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
-
+from social_auth.backends.contrib.github import GithubBackend
+from social_auth.signals import pre_update
 
 class Hero(models.Model):
     """Hero, based on github account of user"""
@@ -61,8 +63,10 @@ class Hero(models.Model):
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
-        #todo: to manager?
-        pass
+        for key, val in response.items():
+            if key != 'id' and not val is None  and hasattr(self, key):
+                setattr(self, key, val)
+
 
     def save(self, *args, **kwargs):
         self.last_update = datetime.datetime.now()
@@ -112,4 +116,19 @@ class Unit(models.Model):
         """returns total hero charm"""
         return self._get_stat('charm')
 
+
+
+def social_auth_update_user(sender, user, response, details, **kwargs):
+
+    try:
+        hero = Hero.objects.get(user=user)
+    except Exception:
+        hero = Hero(user=user)
+
+    hero.update_from_response(response)
+    hero.save()
+
+    return True
+
+pre_update.connect(social_auth_update_user, sender=GithubBackend)
 
