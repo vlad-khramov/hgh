@@ -4,7 +4,7 @@ from django.db import models
 
 class Hero(models.Model):
     """Hero, based on github account of user"""
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
 
     login = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
