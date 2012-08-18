@@ -2,39 +2,40 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Hero(models.Model):
     """Hero, based on github account of user"""
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='hero')
 
     login = models.CharField(max_length=200)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, default='')
 
-    avatar_url = models.URLField()
-    html_url = models.URLField()
-    blog = models.URLField()
-    location = models.CharField(max_length=200)
-    hireable = models.BooleanField()
+    avatar_url = models.URLField(default='')
+    html_url = models.URLField(default='')
+    blog = models.URLField(default='')
+    location = models.CharField(max_length=200,default='')
+    hireable = models.BooleanField(default=False)
 
-    public_repos = models.IntegerField()
-    public_gists = models.IntegerField()
-    followers = models.IntegerField()
-    following = models.IntegerField()
+    public_repos = models.IntegerField(default=0)
+    public_gists = models.IntegerField(default=0)
+    followers = models.IntegerField(default=0)
+    following = models.IntegerField(default=0)
 
-    attack_github = models.IntegerField()
-    defence_github = models.IntegerField()
-    attentiveness_github = models.IntegerField()
-    charm_github = models.IntegerField()
+    attack_github = models.IntegerField(default=0)
+    defence_github = models.IntegerField(default=0)
+    attentiveness_github = models.IntegerField(default=0)
+    charm_github = models.IntegerField(default=0)
 
-    attack_own = models.IntegerField()
-    defence_own = models.IntegerField()
-    attentiveness_own = models.IntegerField()
-    charm_own = models.IntegerField()
+    attack_own = models.IntegerField(default=0)
+    defence_own = models.IntegerField(default=0)
+    attentiveness_own = models.IntegerField(default=0)
+    charm_own = models.IntegerField(default=0)
 
-    race = models.CharField(max_length=100)
+    race = models.CharField(max_length=100, default='human')
 
-    wins = models.IntegerField()
-    losses = models.IntegerField()
-    experience = models.IntegerField()
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
+    experience = models.IntegerField(default=0)
 
     last_update = models.CharField(max_length=100)
 
@@ -58,6 +59,16 @@ class Hero(models.Model):
         """returns total hero charm"""
         return self._get_stat('charm')
 
+    def update_from_response(self, response):
+        """updates hero with info from auth response"""
+        #todo: to manager?
+        pass
+
+    def save(self, *args, **kwargs):
+        self.last_update = datetime.datetime.now()
+
+        super(Hero, self).save(*args, **kwargs)
+
 
 class Unit(models.Model):
     """member of army of hero, based on repositories of user"""
@@ -67,19 +78,19 @@ class Unit(models.Model):
     name = models.CharField(max_length=200)
     custom_name = models.CharField(max_length=200)
 
-    html_url = models.URLField()
-    language = models.CharField(max_length=100)
+    html_url = models.URLField(default='')
+    language = models.CharField(max_length=100, default='')
 
-    forks = models.IntegerField()
-    watchers = models.IntegerField()
-    open_issues = models.IntegerField()
+    forks = models.IntegerField(default=0)
+    watchers = models.IntegerField(default=0)
+    open_issues = models.IntegerField(default=0)
 
-    race = models.CharField(max_length=100)
+    race = models.CharField(max_length=100, default='human')
 
-    attack_github = models.IntegerField()
-    defence_github = models.IntegerField()
-    attentiveness_github = models.IntegerField()
-    charm_github = models.IntegerField()
+    attack_github = models.IntegerField(default=0)
+    defence_github = models.IntegerField(default=0)
+    attentiveness_github = models.IntegerField(default=0)
+    charm_github = models.IntegerField(default=0)
 
     def _get_stat(self, stat):
         """returns total value of stat by its name"""
@@ -100,3 +111,5 @@ class Unit(models.Model):
     def get_charm(self):
         """returns total hero charm"""
         return self._get_stat('charm')
+
+
