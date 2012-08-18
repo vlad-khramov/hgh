@@ -3,7 +3,6 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 import math
-import operator
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
 from apps.helpers import gh, formulas
@@ -71,22 +70,29 @@ class Hero(models.Model):
                 setattr(self, key, val)
 
     def update_race(self):
-        """updates race of hero (most popular race from units)"""
+        """
+        updates race of hero (most popular race from units) and adds race bonuses
+        race sets onlt one times (on register)
+        """
         if self.race: return
 
         if Unit.objects.filter(hero=self).count()==0:
             self.race = 'human'
+        else:
+            units = Unit.objects.filter(hero=self)
 
-        units = Unit.objects.filter(hero=self)
+            races = dict()
+            for unit in units:
+                if unit.race in races:
+                    races[unit.race] += 1
+                else:
+                    races[unit.race] = 1
 
-        races = dict()
-        for unit in units:
-            if unit.race in races:
-                races[unit.race] += 1
-            else:
-                races[unit.race] = 1
+            self.race = sorted(races.iteritems(), key=lambda (k,v): (v,k))[0][0]
 
-        self.race = sorted(races.iteritems(), key=lambda (k,v): (v,k))[0][0]
+        for stat, value in formulas.race_bonuses(self.race).items():
+            setattr(self, stat+'_own', getattr(self, stat+'_own')+value)
+
         self.save()
 
 
