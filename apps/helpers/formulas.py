@@ -1,4 +1,8 @@
+#coding: utf-8
+from __future__ import division
+
 def get_hit_chance(attack, defence, missRequired=True):
+    """ Computes hit chance [0..1] based on attack and defence stat """
     chance = 1
     if attack>=defence:
         if missRequired:
@@ -9,7 +13,21 @@ def get_hit_chance(attack, defence, missRequired=True):
         chance = 0.05
     return chance
 
-
+def get_damage(attack, defence):
+    """ Returns damaged based on attack and defence stat values """
+    if attack>=defence:
+        if defence==0:
+            ratio = 2
+        else:
+            ratio = 1+(attack-defence)*0.5/defence
+        if ratio > 1.5:
+            ratio = 1.5
+    else:
+        ratio = (attack+(defence-attack)*0.5)/defence
+    if ratio<0.25:
+        ratio = 0.25
+    dmg = int(attack*ratio)
+    return 1 if dmg<1 else dmg
 
 def lang_to_race(lang):
 
