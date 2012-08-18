@@ -145,6 +145,8 @@ INSTALLED_APPS = (
     'social_auth',
     'github',
 
+    'apps.simplepagination',
+
     'apps.main',
     'apps.helpers',
 )

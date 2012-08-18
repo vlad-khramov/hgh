@@ -1,0 +1,9 @@
+{% load paginator %}
+
+{% for i in paginator.page_numbers %}
+    {% ifequal i paginator.current_page %}
+        <span class="filmfeed_pages_disabled">{{ i }}</span>
+    {% else %}
+        <a href='{% page_link i paginator.params paginator.anchor %}' class="filmfeed_pages">{{ i }}</a>
+    {% endifequal %}
+{% endfor %}

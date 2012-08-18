@@ -1,0 +1,45 @@
+{% load paginator %}
+
+{% if paginator.PREVIOUS %}
+    <a class="btn btn-mini" href='{% page_link paginator.PREVIOUS paginator.params paginator.anchor %}'>&lt;&lt;&nbsp;</a>
+{% else %}
+    <span class="btn btn-mini disabled">&lt;&lt;&nbsp;</span>
+{% endif %}
+
+{% if paginator.left_page_numbers %}
+    {% for i in paginator.left_page_numbers %}
+        {% ifequal i paginator.current_page %}
+            <span class="btn btn-mini disabled btn-inverse">{{ i }}</span>
+        {% else %}
+            <a class="btn btn-mini" href='{% page_link i paginator.params paginator.anchor %}'>{{ i }}</a>
+        {% endifequal %}
+    {% endfor %}
+{% endif %}
+
+{% if paginator.middle_page_numbers %}
+    <span class="digg_seperator">...</span>
+    {% for i in paginator.middle_page_numbers %}
+        {% ifequal i paginator.current_page %}
+            <span class="btn btn-mini disabled btn-inverse">{{ i }}</span>
+        {% else %}
+            <a class="btn btn-mini" href='{% page_link i paginator.params paginator.anchor %}'>{{ i }}</a>
+        {% endifequal %}
+    {% endfor %}
+{% endif %}
+
+{% if paginator.right_page_numbers %}
+    <span class="digg_seperator">...</span>
+    {% for i in paginator.right_page_numbers %}
+        {% ifequal i paginator.current_page %}
+            <span class="btn btn-mini disabled btn-inverse">{{ i }}</span>
+        {% else %}
+            <a class="btn btn-mini" href='{% page_link i paginator.params paginator.anchor %}'>{{ i }}</a>
+        {% endifequal %}
+    {% endfor %}
+{% endif %}
+
+{% if paginator.NEXT %}
+    <a class="btn btn-mini" href='{% page_link paginator.NEXT paginator.params paginator.anchor %}'>&nbsp;&gt;&gt;</a>
+{% else %}
+    <span class="btn btn-mini disabled">&nbsp;&gt;&gt;</span>
+{% endif %}
