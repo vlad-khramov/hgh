@@ -1,4 +1,6 @@
 #coding: utf-8
+from __future__ import division
+
 import datetime
 from django.contrib.auth.models import User
 from django.db import models
@@ -149,10 +151,10 @@ class Hero(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.attack_github = 1 + math.ceil(self.public_repos/2.0) + math.ceil(self.followers/2.0)
-        self.defence_github = self.public_repos + math.ceil(self.public_gists/2.0)
-        self.attentiveness_github = 1 + self.following + math.ceil(self.followers/2.0)
-        self.charm_github = self.followers + (1 if self.hireable else 0)
+        self.attack_github = 1+int(self.public_repos/2)+int(self.followers/2)
+        self.defence_github = self.public_repos+int(self.public_gists/2)
+        self.attentiveness_github = 1+self.following+int(self.followers/2)
+        self.charm_github = self.followers+int(self.hireable)
 
         self.power = self.get_sum_stats()
 
