@@ -7,8 +7,11 @@ from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
 from apps.helpers import gh, formulas
 
+
+
 class Hero(models.Model):
     """Hero, based on github account of user"""
+
     user = models.OneToOneField(User, related_name='hero')
 
     login = models.CharField(max_length=200)
@@ -41,6 +44,8 @@ class Hero(models.Model):
     losses = models.IntegerField(default=0)
     experience = models.IntegerField(default=0)
 
+    power = models.IntegerField(default=0)
+    army_power = models.IntegerField(default=0)
     last_update = models.DateTimeField(default=datetime.datetime(2000,1,1))
 
     def _get_stat(self, stat):
@@ -62,6 +67,9 @@ class Hero(models.Model):
     def get_charm(self):
         """returns total hero charm"""
         return self._get_stat('charm')
+
+    def get_sum_stats(self):
+        return self.get_attack()+self.get_defence()+self.get_attentiveness()+self.get_charm()
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
@@ -93,7 +101,6 @@ class Hero(models.Model):
         for stat, value in formulas.race_bonuses(self.race).items():
             setattr(self, stat+'_own', getattr(self, stat+'_own')+value)
 
-        self.save()
 
 
 
@@ -110,14 +117,17 @@ class Hero(models.Model):
                 return
             else:
                 Unit(hero=self, name = 'Dummy').save()
+                self.army_power = 0
                 return
 
         Unit.objects.filter(hero=self).delete()
 
+        self.army_power = 0
         for repo in repos:
             unit = Unit(hero=self)
             unit.update_from_response(repo)
             unit.save()
+            self.army_power += unit.get_sum_stats_github()
 
 
     def save(self, *args, **kwargs):
@@ -125,6 +135,8 @@ class Hero(models.Model):
         self.defence_github = self.public_repos + math.ceil(self.public_gists/2.0)
         self.attentiveness_github = 1 + self.following + math.ceil(self.followers/2.0)
         self.charm_github = self.followers + (1 if self.hireable else 0)
+
+        self.power = self.get_sum_stats()
 
         super(Hero, self).save(*args, **kwargs)
 
@@ -170,6 +182,9 @@ class Unit(models.Model):
     def get_charm(self):
         """returns total hero charm"""
         return self._get_stat('charm')
+
+    def get_sum_stats_github(self):
+        return self.attack_github+self.defence_github+self.attentiveness_github+self.charm_github
 
 
     def update_from_response(self, response):
@@ -217,6 +232,7 @@ def social_auth_update_user(sender, user, response, details, **kwargs):
     if created:
         hero.update_army()
         hero.update_race()
+        hero.save()
 
 
     return True
