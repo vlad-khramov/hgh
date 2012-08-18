@@ -24,4 +24,4 @@ def profile(request):
 
 def info(request, login=''):
     hero = get_object_or_404(Hero, login=login)
-    return render(request, 'main/info.html', {'': hero})
+    return render(request, 'main/info.html', {'hero': hero})

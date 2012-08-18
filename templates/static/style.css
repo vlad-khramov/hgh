@@ -3,3 +3,7 @@
 .right {
     float: right;
 }
+
+.span1-5 {
+    width: 100px;
+}

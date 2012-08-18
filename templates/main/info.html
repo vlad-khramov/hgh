@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="row">
+        <div class="span1-5">
+            <img src="{{ hero.avatar_url }}">
+        </div>
+        <div class="span10">
+            <h2>{{ hero.login }}</h2>
+            {{ hero.name }}<br>
+            {{ hero.race }}<br><br>
 
+            Attack: {{ hero.get_attack }}<br>
+            Defence: {{ hero.get_defence }}<br>
+            Attentiveness: {{ hero.get_attentiveness }}<br>
+            Charm: {{ hero.get_charm }}<br>
+        </div>
+    </div>
+    <div class="row">
+
+    </div>
 {% endblock %}
