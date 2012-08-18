@@ -71,6 +71,9 @@ class Hero(models.Model):
     def get_sum_stats(self):
         return self.get_attack()+self.get_defence()+self.get_attentiveness()+self.get_charm()
 
+    def get_total_power(self):
+        return self.power+self.army_power
+
     def update_from_response(self, response):
         """updates hero with info from auth response"""
         for key, val in response.items():
