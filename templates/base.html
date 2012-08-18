@@ -45,7 +45,7 @@
 
                     {% if user.is_authenticated %}
                         <li>
-                            <a href="{% url profile %}">{{ user.username}}</a>
+                            <a href="{% url profile %}"><img src="{{ user.hero.avatar_url }}" width="20" height="20"> {{ user.username}}</a>
                         </li>
                         {% navitem 'logout' 'Logout' %}
                     {% else %}
