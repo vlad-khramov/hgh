@@ -44,6 +44,7 @@ class Hero(models.Model):
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
     experience = models.IntegerField(default=0)
+    level = models.IntegerField(default=1)
 
     power = models.IntegerField(default=0)
     army_power = models.IntegerField(default=0)
