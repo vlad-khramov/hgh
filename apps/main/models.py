@@ -99,7 +99,7 @@ class Hero(models.Model):
         
         Race is set only once (after registration).
         """
-        if self.race: return#suppose there exception will be; hasattr?
+        if self.race: return
 
         if Unit.objects.filter(hero=self).count()==0:
             self.race = 'human'
