@@ -70,6 +70,7 @@ class Hero(models.Model):
                 setattr(self, key, val)
 
     def update_army(self):
+        """updates army of hero with info of repositories in github"""
         #todo: check for battle
         repos = gh.get_repos(self.login)
         if not repos:
@@ -166,13 +167,16 @@ def social_auth_update_user(sender, user, response, details, **kwargs):
 
     try:
         hero = Hero.objects.get(user=user)
+        created = False
     except Exception:
         hero = Hero(user=user)
+        created = True
 
     hero.update_from_response(response)
     hero.save()
 
-    hero.update_army()
+    if created:
+        hero.update_army()
 
     return True
 
