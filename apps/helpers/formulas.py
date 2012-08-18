@@ -28,6 +28,17 @@ def get_damage(attack, defence):
         ratio = 0.25
     dmg = int(attack*ratio)
     return 1 if dmg<1 else dmg
+    
+def scale_prop(prop, prop_limit, prop_max=16000):
+    """ Scales down account and repos properties """
+    lim = prop_limit
+    if prop < lim:
+        return prop
+    ratio = (prop-lim)/(prop_max-lim)
+    if prop < lim+(prop_max-lim)/2:
+        ratio = (prop-lim)/((prop_max-lim)/2)
+    new_prop = int(ratio*lim)
+    return 1 if new_prop < 1 else new_prop
 
 def lang_to_race(lang):
 
