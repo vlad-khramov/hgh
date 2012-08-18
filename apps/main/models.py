@@ -176,7 +176,7 @@ class Unit(models.Model):
     watchers = models.IntegerField(default=0)
     open_issues = models.IntegerField(default=0)
 
-    race = models.CharField(max_length=100, default='human')
+    race = models.CharField(max_length=100, default='')
 
     attack_github = models.IntegerField(default=0)
     defence_github = models.IntegerField(default=0)
@@ -219,7 +219,8 @@ class Unit(models.Model):
         self.attentiveness_github = math.ceil(self.watchers/2.0)
         self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.open_issues/4.0)
 
-        self.race = formulas.lang_to_race(self.language)
+        if not self.race:
+            self.race = formulas.lang_to_race(self.language)
 
         if not self.custom_name:
             self.custom_name = self.name
