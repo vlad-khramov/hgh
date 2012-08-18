@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Hero(models.Model):
+    """Hero, based on github account of user"""
     user = models.ForeignKey(User)
 
     login = models.CharField(max_length=200)
@@ -56,3 +57,26 @@ class Hero(models.Model):
     def get_charm(self):
         """returns total hero charm"""
         return self._get_stat('charm')
+
+
+class Unit(models.Model):
+    """member of army of hero, based on repositories of user"""
+
+    hero = models.ForeignKey(Hero, related_name='units')
+
+    name = models.CharField(max_length=200)
+    custom_name = models.CharField(max_length=200)
+
+    html_url = models.URLField()
+    language = models.CharField(max_length=100)
+
+    forks = models.IntegerField()
+    watchers = models.IntegerField()
+    open_issues = models.IntegerField()
+
+    race = models.CharField(max_length=100)
+
+    attack_github = models.IntegerField()
+    defence_github = models.IntegerField()
+    attentiveness_github = models.IntegerField()
+    charm_github = models.IntegerField()
