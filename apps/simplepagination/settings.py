@@ -6,8 +6,8 @@ from django.conf import settings
 # frame_size, number_of_pages and current_page_number                                                        #
 # this function must return dictionary that will be added to view dictionary under key 'paginator'           #
 PAGINATION_BACKENDS = getattr(settings, 'PAGINATION_BACKENDS', {                                             #
-    'digg': 'simplepagination.backends.digg.DiggPaginator',                                                  #
-    'filmfeed': 'simplepagination.backends.filmfeed.FilmfeedPaginator',                                      #
+    'digg': 'apps.simplepagination.backends.digg.DiggPaginator',                                                  #
+    'filmfeed': 'apps.simplepagination.backends.filmfeed.FilmfeedPaginator',                                      #
 })                                                                                                           #
 ##############################################################################################################
 

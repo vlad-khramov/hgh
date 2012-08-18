@@ -1,4 +1,4 @@
-from simplepagination import settings 
+from apps.simplepagination import settings
 
 
 class Paginator(object):

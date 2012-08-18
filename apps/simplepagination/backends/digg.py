@@ -1,4 +1,4 @@
-from simplepagination.backends import Paginator
+from apps.simplepagination.backends import Paginator
 
 
 class DiggPaginator(Paginator):
