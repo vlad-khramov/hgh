@@ -232,7 +232,7 @@ class Battle(models.Model):
 
     is_active = models.BooleanField()
     round = models.SmallIntegerField(default=1)
-    winner = models.ForeignKey(Hero, related_name='winned_battles')
+    winner = models.ForeignKey(Hero, related_name='winned_battles', null=True, default=None)
 
 
 
