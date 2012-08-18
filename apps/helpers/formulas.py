@@ -1,6 +1,8 @@
 #coding: utf-8
 from __future__ import division
 
+from math import ceil, floor
+
 def get_hit_chance(attack, defence, missRequired=True):
     """ Computes hit chance [0..1] based on attack and defence stat """
     chance = 1
@@ -30,7 +32,10 @@ def get_damage(attack, defence):
     return 1 if dmg<1 else dmg
     
 def scale_prop(prop, prop_limit, prop_max=16000):
-    """ Scales down account and repos properties """
+    """ Scales down account and repos properties.
+
+    Returns new value of the scaled down property.
+    """
     lim = prop_limit
     if prop < lim:
         return prop
@@ -41,7 +46,7 @@ def scale_prop(prop, prop_limit, prop_max=16000):
     return 1 if new_prop < 1 else new_prop
 
 def lang_to_race(lang):
-
+    """ Returns race based on repo language """
     LANG_TO_RACES = {
         'Python': 'elf',
         'Ruby': 'goblin',
@@ -60,7 +65,8 @@ def lang_to_race(lang):
         return 'human'
 
 
-def race_bonuses(race):
+def race_bonuses(race, level):
+    """ Returns stat bonuses based on race and level of hero """
     BONUSES = {
         'troll': (0, 2, 2, 0),
         'goblin': (2, 1, 1, 0),
@@ -72,11 +78,11 @@ def race_bonuses(race):
         'human': (1, 1, 1, 1),
         'gnome': (0, 1, 1, 2)
     }
-
     bonus = (1,1,1,1)
     if race in BONUSES:
         bonus = BONUSES[race]
-
+    LM = ceil(0.1*level)
+    bonus = [int(stat*LM) for stat in  bonus]
     return {
         'attack': bonus[0],
         'defence': bonus[1],
