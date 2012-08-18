@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 import math
+from django.db.models.query_utils import Q
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
 from apps.helpers import gh, formulas
@@ -76,6 +77,9 @@ class Hero(models.Model):
 
     def in_battle_queue(self):
         return BattleQueue.objects.filter(hero=self).count() > 0
+
+    def in_battle(self):
+        return Battle.objects.filter(Q(is_active=True),Q(hero1=self)|Q(hero2=self)).count() > 0
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
