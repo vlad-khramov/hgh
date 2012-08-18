@@ -39,7 +39,7 @@ class Hero(models.Model):
     losses = models.IntegerField(default=0)
     experience = models.IntegerField(default=0)
 
-    last_update = models.CharField(max_length=100)
+    last_update = models.DateTimeField(default=datetime.datetime(2000,1,1))
 
     def _get_stat(self, stat):
         """returns total value of stat by its name"""
@@ -69,7 +69,6 @@ class Hero(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.last_update = datetime.datetime.now()
 
         super(Hero, self).save(*args, **kwargs)
 
