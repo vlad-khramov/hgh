@@ -1,5 +1,5 @@
 #coding: utf-8
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from apps.main.models import Hero
 
 
@@ -18,3 +18,10 @@ def login(request):
 def rating(request):
 
     return render(request, 'main/rating.html',{})
+
+def profile(request):
+    return render(request, 'main/profile.html',{'hero':request.user.hero})
+
+def info(request, login=''):
+    hero = get_object_or_404(Hero, login=login)
+    return render(request, 'main/info.html', {'': hero})

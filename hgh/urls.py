@@ -20,7 +20,9 @@ urlpatterns = patterns('',
 
     url(r'^$', 'apps.main.views.home', name='home'),
     url(r'^rating/$', 'apps.main.views.rating', name='rating'),
-    url(r'^profile/$', 'apps.main.views.rating', name='profile'),
+    url(r'^profile/$', 'apps.main.views.profile', name='profile'),
+
+    url(r'^info/(?P<login>[^/]+)$', 'apps.main.views.info', name='info'),
 
 
     url(r'', include('social_auth.urls')),
