@@ -6,20 +6,52 @@
 {% block content %}
 
     <div class="row">
-        <div class="span6" style="text-align: center;">
+        <div class="span5" style="text-align: center;">
                 Heroes of Git and hub is game where you becomes a hero and your repositories in <a href="http://github.com">Github</a> transforms to your army.
                 <br><br>
                 <a href="/login/github/" class="btn btn-large">Login with Github</a>
 
         </div>
-        <div class="span6">
-            <h2>Rating</h2>
+        <div class="span3">
+            <h2>Rating by experience</h2>
 
-            {% for hero in rating_exp %}
-                {{ forloop.counter }} {% hero hero %}
-            {% endfor %}
+            <table class="table">
+                <colgroup>
+                    <col width="20">
+                    <col>
+                </colgroup>
+                {% for hero in rating_exp %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{% hero hero %}</td>
+                    </tr>
+                {% endfor %}
+            </table>
 
-            <a class="right" href="{% url rating %}">All rating &rarr;</a>
+            <div>
+                <a class="right" href="{% url rating %}">All rating &rarr;</a>
+            </div>
+        </div>
+        <div class="span4">
+            <h2>Rating by power</h2>
+
+            <table class="table">
+                <colgroup>
+                    <col width="20">
+                    <col>
+                    <col width="30">
+                </colgroup>
+                {% for hero in rating_power %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{% hero hero %}</td>
+                        <td>{{ hero.get_total_power }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div>
+                <a class="right" href="{% url rating %}">All rating &rarr;</a>
+            </div>
         </div>
     </div>
 

@@ -6,8 +6,15 @@ from apps.main.models import Hero
 def home(request):
 
     rating_exp = Hero.objects.order_by('-experience')[:20]
+    rating_power = Hero.objects.extra(
+        select={'total_power':'power + army_power'},
+        order_by=('-total_power',)
+    )[:20]
+
     return render(request, 'main/home.html',{
-        'rating_exp': rating_exp
+        'rating_exp': rating_exp,
+        'rating_power': rating_power,
+
     })
 
 
