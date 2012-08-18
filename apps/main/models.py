@@ -265,6 +265,14 @@ class Battle(models.Model):
         else:
             return None
 
+    def is_moved(self, hero):
+        if self.hero1==hero:
+            return self.hero1_moved
+        elif self.hero2==hero:
+            return self.hero2_moved
+        else:
+            return False
+
 
 
 
