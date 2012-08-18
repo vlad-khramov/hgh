@@ -128,6 +128,15 @@ class Unit(models.Model):
 
         super(Unit, self).save(*args, **kwargs)
 
+class Spell(models.Model):
+    """a spell that `hero` can cast"""
+
+    hero = models.ForeignKey(Hero, related_name='spells')
+
+    type = models.CharField(max_length=200)
+    cnt = models.IntegerField(default=1)
+    
+
 
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
