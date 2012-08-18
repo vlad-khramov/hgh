@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load unitline %}
+{% load hero_main_info %}
+
 
 {% block content %}
     <div class="row">
@@ -7,14 +9,7 @@
             <img src="{{ hero.avatar_url }}">
         </div>
         <div class="span10">
-            <h2>{{ hero.login }}</h2>
-            {{ hero.name }}<br>
-            {{ hero.race }}<br><br>
-
-            Attack: {{ hero.get_attack }}<br>
-            Defence: {{ hero.get_defence }}<br>
-            Attentiveness: {{ hero.get_attentiveness }}<br>
-            Charm: {{ hero.get_charm }}<br>
+            {% hero_main_info hero %}
         </div>
     </div>
     <div class="row">
