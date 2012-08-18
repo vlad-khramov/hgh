@@ -65,7 +65,7 @@ def lang_to_race(lang):
         return 'human'
 
 
-def race_bonuses(race, level):
+def race_bonuses(race, level=1):
     """ Returns stat bonuses based on race and level of hero """
     BONUSES = {
         'troll': (0, 2, 2, 0),
