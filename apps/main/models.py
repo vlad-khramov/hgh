@@ -5,6 +5,7 @@ from django.db import models
 import math
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
+from apps.helpers import gh
 
 class Hero(models.Model):
     """Hero, based on github account of user"""
@@ -34,7 +35,7 @@ class Hero(models.Model):
     attentiveness_own = models.IntegerField(default=0)
     charm_own = models.IntegerField(default=0)
 
-    race = models.CharField(max_length=100, default='human')
+    race = models.CharField(max_length=100, default='')
 
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
@@ -67,6 +68,21 @@ class Hero(models.Model):
         for key, val in response.items():
             if key != 'id' and not val is None  and hasattr(self, key):
                 setattr(self, key, val)
+
+    def update_army(self):
+        #todo: check for battle
+        repos = gh.get_repos(self.login)
+        if not repos:
+            return
+
+        Unit.objects.filter(hero=self).delete()
+
+        for repo in repos:
+            unit = Unit(hero=self)
+            unit.update_from_response(repo)
+            unit.save()
+
+
 
 
     def save(self, *args, **kwargs):
@@ -120,11 +136,18 @@ class Unit(models.Model):
         """returns total hero charm"""
         return self._get_stat('charm')
 
+
+    def update_from_response(self, response):
+        """updates hero with info from auth response"""
+        for key, val in response.items():
+            if key != 'id' and not val is None and hasattr(self, key):
+                setattr(self, key, val)
+
     def save(self, *args, **kwargs):
         self.attack_github = math.ceil(self.forks/2.0)
         self.defence_github = self.forks + math.ceil(self.watchers/4.0)
         self.attentiveness_github = math.ceil(self.watchers/2.0)
-        self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.opened_issues/4.0)
+        self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.open_issues/4.0)
 
         super(Unit, self).save(*args, **kwargs)
 
@@ -148,6 +171,8 @@ def social_auth_update_user(sender, user, response, details, **kwargs):
 
     hero.update_from_response(response)
     hero.save()
+
+    hero.update_army()
 
     return True
 

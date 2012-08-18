@@ -143,6 +143,7 @@ INSTALLED_APPS = (
 
     'south',
     'social_auth',
+    'github',
 
     'apps.main',
     'apps.helpers',
