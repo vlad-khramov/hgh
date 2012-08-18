@@ -120,6 +120,14 @@ class Unit(models.Model):
         """returns total hero charm"""
         return self._get_stat('charm')
 
+    def save(self, *args, **kwargs):
+        self.attack_github = math.ceil(self.forks/2.0)
+        self.defence_github = self.forks + math.ceil(self.watchers/4.0)
+        self.attentiveness_github = math.ceil(self.watchers/2.0)
+        self.charm_github = math.ceil(self.watchers/2.0) + math.ceil(self.opened_issues/4.0)
+
+        super(Unit, self).save(*args, **kwargs)
+
 
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
