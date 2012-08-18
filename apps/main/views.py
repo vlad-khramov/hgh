@@ -10,3 +10,7 @@ def home(request):
 def login(request):
 
     return render(request, 'main/login.html',{})
+
+def rating(request):
+
+    return render(request, 'main/rating.html',{})

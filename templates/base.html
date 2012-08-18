@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load navitem %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -41,6 +41,15 @@
             <div class="nav-collapse">
                 <ul class="nav pull-right">
 
+                    {% navitem 'rating' 'Rating' %}
+
+                    {% if user.is_authenticated %}
+                        {% navitem 'logout' 'logout' %}
+                    {% else %}
+                        <li>
+                            <a href="{% url socialauth_begin 'github' %}">login with Github</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'social_auth',
 
     'apps.main',
+    'apps.helpers', 
 )
 
 
