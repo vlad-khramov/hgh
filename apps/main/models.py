@@ -78,8 +78,11 @@ class Hero(models.Model):
     def in_battle_queue(self):
         return BattleQueue.objects.filter(hero=self).count() > 0
 
-    def in_battle(self):
-        return Battle.objects.filter(Q(is_active=True),Q(hero1=self)|Q(hero2=self)).count() > 0
+    def get_battle(self):
+        try:
+            return Battle.objects.get(Q(is_active=True),Q(hero1=self)|Q(hero2=self))
+        except Exception:
+            return None
 
     def update_from_response(self, response):
         """updates hero with info from auth response"""
