@@ -389,7 +389,16 @@ class Spell(models.Model):
                 value=LM+att_lower,
                 type=self.type, 
                 param=param
-            ).save()
+            ).save()        
+        elif self.type=='Lightning':
+            if not target.is_immune_to(self):
+                target.life -= random.randint(1, LM*2*att_upper)
+                target.save()
+        elif self.type=='Fireball':
+            if not target.is_immune_to(self):
+                target.life -= random.randint(int(LM*1.5), int(LM*1.7*att_upper))
+                target.save()
+            
  
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
