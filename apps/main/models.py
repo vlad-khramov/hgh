@@ -61,7 +61,7 @@ class Hero(models.Model):
 
     def _get_stat(self, stat):
         """returns total value of stat by its name"""
-        return getattr(self, stat+'_own')+getattr(self, stat+'_github')
+        return getattr(self, stat+'_own')+getattr(self, stat+'_github')+getattr(self, stat+'_race')
 
     def get_attack(self):
         """returns total hero attack"""
