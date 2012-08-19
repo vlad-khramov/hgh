@@ -3,7 +3,7 @@ from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
 from apps.main.models import Unit
 
-def check_defeat(army):
+def check_defeat(army): 
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
     return all([unit.life <= 0 for unit in army])
 
