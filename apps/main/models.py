@@ -317,6 +317,8 @@ class Battle(models.Model):
     round = models.SmallIntegerField(default=1)
     winner = models.ForeignKey(Hero, related_name='winned_battles', null=True, default=None)
 
+    log = models.TextField(default='')
+
     def get_opponent(self, hero):
         if self.hero1==hero:
             return self.hero2
