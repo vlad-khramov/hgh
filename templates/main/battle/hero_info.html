@@ -1,0 +1,11 @@
+{% load hero_main_info %}
+<table>
+    <tr>
+        <td style="vertical-align: top;padding: 10px 10px 0 0">
+            <img src="{{ hero.avatar_url }}">
+        </td>
+        <td>
+            {% hero_main_info hero %}
+        </td>
+    </tr>
+</table>
