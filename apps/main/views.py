@@ -53,7 +53,7 @@ def rating(request, type=''):
 @login_required
 @check_battle
 def profile(request):
-    return render(request, 'main/profile.html',{'hero':request.user.hero})
+    return redirect('info', request.user.hero.login)
 
 def info(request, login=''):
     hero = get_object_or_404(Hero, login=login)
