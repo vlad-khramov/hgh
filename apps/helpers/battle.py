@@ -23,6 +23,11 @@ def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
 
     hero.losses +=1
     hero.experience = get_exp(hero, opponent, False)
+    if hero.has_got_level():
+        hero.gain_level()
+    if opponent.has_got_level():
+        opponent.gain_level()
+
     hero.save()
     opponent.save()
 
