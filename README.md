@@ -13,3 +13,4 @@ Installation
 5. Run `python manage.py migrate`
 6. Run `python manage.py runserver`
 7. Open in your browser http://localhost:8000/
+8. Add to cronjobs (hourly) `python path/to/project/crons/update_heroes.py` to auto update heroes and army
