@@ -87,6 +87,13 @@ class Hero(models.Model):
     def get_total_power(self):
         return self.power+self.army_power
 
+    def add_experience(self, exp):
+        self.experience += exp
+        HeroLog(hero=self, date=datetime.datetime.now(), text='%s gets %s experience' (self.login, exp)).save()
+        if self.has_got_level():
+            self.gain_level()
+
+
     def in_battle_queue(self):
         return BattleQueue.objects.filter(hero=self).count() > 0
 
@@ -171,6 +178,8 @@ class Hero(models.Model):
             min_stat+'_own',
             getattr(self, min_stat+'_own')+LM
         )
+
+        HeroLog(hero=self, date=datetime.datetime.now(), text='%s gained new level: %s' (self.login, self.level)).save()
 
     def has_got_level(self):
         return self.experience >= formulas.dsu(self.level)
@@ -310,6 +319,9 @@ class HeroLog(models.Model):
 
     date = models.DateTimeField()
     text = models.CharField(max_length=255)
+
+    class Meta:
+        ordering  = ['-date']
 
 class BattleQueue(models.Model):
     """Queue of heroes, waiting battle"""

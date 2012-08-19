@@ -1,7 +1,8 @@
 # coding: utf-8
+from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
-from apps.main.models import Unit
+from apps.main.models import Unit, HeroEffect, UnitEffect, CastingSpell, HeroLog
 
 def check_defeat(army):
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
@@ -16,18 +17,14 @@ def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
         battle.winner = opponent
 
         opponent.wins += 1
-        opponent.experience += get_exp(opponent, hero, True)
+        opponent.add_experience(get_exp(opponent, hero, True))
     else:
         opponent.losses += 1
-        opponent.experience += get_exp(opponent, hero, False)
+        opponent.add_experience(get_exp(opponent, hero, False))
         battle.add_log_line_hero_defeated( opponent.login)
 
     hero.losses +=1
-    hero.experience += get_exp(hero, opponent, False)
-    if hero.has_got_level():
-        hero.gain_level()
-    if opponent.has_got_level():
-        opponent.gain_level()
+    hero.add_experience(get_exp(hero, opponent, False))
 
     hero.save()
     opponent.save()
@@ -85,4 +82,6 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
 
         hero1_army = [unit for unit in hero1_army if unit.life>0]
         hero2_army = [unit for unit in hero2_army if unit.life>0]
+
+        #CastingSpell.objects.select_related().filter(spell__in=(hero1.spells.all()|hero2.spells.all())).delete()
 
