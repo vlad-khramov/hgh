@@ -37,7 +37,16 @@ def get_damage(attack, defence):
         ratio = 0.25
     dmg = int(attack*ratio)
     return 1 if dmg<1 else dmg
-    
+
+def get_exp(hero, opponent, win = True):
+    """ Returns experience for hero, derivable in battle """
+    if win:
+        return min(10, 2*opponent.get_total_power()/hero.get_total_power())
+    else:
+        return 0 if opponent.get_total_power() < hero.get_total_power() else 1
+
+
+
 def scale_prop(prop, prop_limit, prop_max=16000):
     """ Scales down account and repos properties.
 
