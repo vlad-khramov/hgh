@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Script for updating heroes and their armies by cron
 """
