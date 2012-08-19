@@ -24,4 +24,5 @@ def get_user(login):
     except Exception:
         return {}
 
-    return dict([(key[1:],val) for key,val in user.__dict__.items()])
+    return dict([(key[1:],val) for key,val in user.__dict__.items()
+                               if type(val).__name__!='instance' or val.__class__.__name__!='_NotSetType'])
