@@ -38,7 +38,24 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
     army_dict = dict([(unit.pk,unit) for unit in hero1_army+hero2_army])
     #casting of spells must be before direct attacks
     # only units survived after spells do attack
-
+    try:
+        spell1 = CastingSpell.objects.filter(spell__hero=hero1)[0]
+        spell2 = CastingSpell.objects.filter(spell__hero=hero2)[0]
+    except:
+        pass
+    target1 = spell1.target_unit if spell1.target_unit is not None else spell1.target_hero
+    target2 = spell2.target_unit if spell2.target_unit is not None else spell2.target_hero
+    buf1 = spell1.spell.produces_effect()
+    buf2 = spell2.spell.produces_effect()
+    # bufs should be processed before instants since 
+    # the former can supply unit with immunity
+    if (buf1 and not buf2):
+        spell1.spell.cast(hero1, hero1_army, hero2, hero2_army, target1, spell1.target_param)
+        spell2.spell.cast(hero2, hero2_army, hero1, hero1_army, target2, spell2.target_param)
+    else:
+        # cases of both instants, both bufs and inverse of first case are at this branch
+        spell2.spell.cast(hero2, hero2_army, hero1, hero1_army, target2, spell2.target_param)
+        spell1.spell.cast(hero1, hero1_army, hero2, hero2_army, target1, spell1.target_param)
     # after casting delete empty entries from spellbook
     Spell.objects.filter(cnt__lte=0).delete()
     # and delete what was casted at this turn

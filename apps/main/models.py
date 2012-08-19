@@ -451,6 +451,7 @@ class Spell(models.Model):
             return 'opponent_unit'
 
     def produces_effect(self):
+        """ Returns whether spell produces an effect (hero of unit) """
         return self.type in ['UnitBuf', 'HeroBuf', 'TitanSkin', 'Amnezia', 'ThornsAura']
 
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
