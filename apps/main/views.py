@@ -161,13 +161,17 @@ def battle(request):
     if not battle.is_active:
         return redirect('postbattle')
 
+    spells = hero.spells.all()
+    opponent_spells = opponent.spells.all()
     return render(request, 'main/battle.html', {
         'hero': hero,
         'army': army,
+        'spells': spells,
         'is_moved': is_moved,
 
         'opponent': opponent,
         'opponent_army': opponent_army,
+        'opponent_spells': opponent_spells,
         'battle': battle
     })
 
