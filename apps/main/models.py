@@ -96,6 +96,10 @@ class Hero(models.Model):
         except Exception:
             return None
 
+    def get_battles(self):
+        return Battle.objects.filter(Q(hero1=self)|Q(hero2=self))
+
+
     def update_from_response(self, response):
         """updates hero with info from auth response"""
         NO_MAX = 0
