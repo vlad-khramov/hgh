@@ -111,10 +111,10 @@ def battle(request):
         else:
             return redirect('profile')
 
-    army = list(hero.units.select_related().filter(life>0))
+    army = list(hero.units.select_related().filter(life__gt = 0))
 
     opponent = battle.get_opponent(hero)
-    opponent_army = list(opponent.units.select_related().filter(life>0))
+    opponent_army = list(opponent.units.select_related().filter(life__gt = 0))
     opponent_army_dict = dict([(unit.pk,unit) for unit in opponent_army])
 
     if battle is None:
