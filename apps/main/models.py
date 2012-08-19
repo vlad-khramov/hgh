@@ -197,6 +197,8 @@ class Hero(models.Model):
             unit.save()
             self.army_power += unit.get_sum_stats_github()
 
+        self.last_update = datetime.datetime.now()
+
 
     def save(self, *args, **kwargs):
         self.attack_github = 1+int(self.public_repos/2)+int(self.followers/2)
