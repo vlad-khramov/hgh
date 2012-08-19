@@ -24,7 +24,7 @@ PAGINATION_KEY = getattr(settings, 'PAGINATION_KEY', 'object_list')             
 
 ### PER_PAGE #################################################################################################
 # Default number of items on page                                                                            #
-PAGINATION_PER_PAGE = getattr(settings, 'PAGINATION_PER_PAGE', 25)                                           #
+PAGINATION_PER_PAGE = getattr(settings, 'PAGINATION_PER_PAGE', 20)                                           #
 ##############################################################################################################
 
 ### FRAME_SIZE ###############################################################################################
