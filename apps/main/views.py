@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 import random
 from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q

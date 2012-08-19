@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
 from apps.main.models import Unit
@@ -74,6 +75,7 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         for unit in hero1_army+hero2_army:
             if hasattr(unit, 'changed'):
                 unit.save()
-
+        hero1_army = [unit for unit in hero1_army if unit.life>0]
+        hero2_army = [unit for unit in hero2_army if unit.life>0]
 
 
