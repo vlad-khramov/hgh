@@ -367,12 +367,16 @@ class Spell(models.Model):
     cnt = models.IntegerField(default=1)
     
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
+        LM = int(math.ceil(initiator.level*0.1))
+        att_lower = int(initiator.attentiveness*0.1)
+        att_upper = int(math.ceil(initiator.attentiveness*0.1))
         if self.type=='UnitBuf':
             UnitEffect(
                 unit=target, 
                 duration=get_spell_duration(
                     initiator.level, initiator.get_attentiveness()
-                ), 
+                ),
+                value=LM+att_lower,
                 type=self.type,
                 param=param
             ).save()
@@ -382,6 +386,7 @@ class Spell(models.Model):
                 duration=get_spell_duration(
                     initiator.level, initiator.get_attentiveness()
                 ), 
+                value=LM+att_lower,
                 type=self.type, 
                 param=param
             ).save()
