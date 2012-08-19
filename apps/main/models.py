@@ -163,7 +163,11 @@ class Hero(models.Model):
         self.level += 1
         self.update_race_bonuses()
         min_stat = self.get_minimal_stat()
-        setattr(self, min_stat+'_own', self._get_stat(min_stat)+LM)
+        setattr(
+            self, 
+            min_stat+'_own', 
+            getattr(self, min_stat+'_own')+LM
+        )
 
     def update_army(self):
         """
