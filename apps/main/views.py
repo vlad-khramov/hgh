@@ -136,6 +136,7 @@ def battle(request):
     if 'runaway' in request.GET:
         battle.is_active=False
         battle.winner = battle.get_opponent(hero)
+        battle.add_log_line_hero_runaway(hero.login)
         battle.save()
 
         return redirect('postbattle')

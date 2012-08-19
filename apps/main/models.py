@@ -423,6 +423,14 @@ class Battle(models.Model):
 
         self.add_log_line(random.choice(strings) % hero)
 
+    def add_log_line_hero_runaway(self, hero):
+        strings = (
+            '<b>%s</b> ran away from battle field',
+            '<b>%s</b> scared and ran away',
+        )
+
+        self.add_log_line(random.choice(strings) % hero)
+
 
     def add_log_line_unit_defeated(self, unit):
         strings = (
