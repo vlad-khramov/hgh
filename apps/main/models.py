@@ -284,6 +284,13 @@ class Battle(models.Model):
         else:
             return False
 
+    def set_moved(self, hero, val):
+        if self.hero1==hero:
+            self.hero1_moved = val
+        elif self.hero2==hero:
+            self.hero2_moved = val
+
+
 
 
 class Spell(models.Model):
