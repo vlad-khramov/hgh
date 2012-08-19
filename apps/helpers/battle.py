@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
 from apps.main.models import Unit
