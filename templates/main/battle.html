@@ -47,7 +47,7 @@
                                 <select name="spell" id="spell">
                                     <option value="0">None</option>
                                     {% for spell in spells %}
-                                        <option value="{{ spell.pk }}">{{ spell }}</option>
+                                        <option value="{{ spell.pk }}">{{ spell }} ({{ spell.cnt }})</option>
                                     {% endfor %}
                                 </select>
                             </td>
