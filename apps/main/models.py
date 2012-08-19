@@ -348,8 +348,9 @@ class Spell(models.Model):
     type = models.CharField(max_length=200)
     cnt = models.IntegerField(default=1)
     
-
-
+    def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
+        pass
+        
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
 
