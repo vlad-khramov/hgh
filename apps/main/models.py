@@ -156,7 +156,14 @@ class Hero(models.Model):
         else:
             return random.choice(min_stats)
 
-
+    def gain_level(self):
+        """ Increases hero level with all the recomputings """
+        # computing Level Multiplier *before* level changing
+        LM = int(math.ceil(0.1*self.level))
+        self.level += 1
+        self.update_race_bonuses()
+        min_stat = self.get_minimal_stat()
+        setattr(self, min_stat+'_own', self._get_stat(min_stat)+LM)
 
     def update_army(self):
         """
