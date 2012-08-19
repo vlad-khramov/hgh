@@ -21,12 +21,14 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th>life</th>
                             <th>target</th>
                         </tr>
                     </thead>
                     {% for unit in army %}
                         <tr>
                             <td>{% unitline unit %}</td>
+                            <td>{{ unit.life }}/{{ unit.get_max_life }}</td>
                             {% if is_moved %}
                                 <td>{{ unit.battle_target.custom_name }}</td>
                             {% else %}
@@ -56,6 +58,7 @@
                     {% for unit in opponent_army %}
                         <tr>
                             <td>{% unitline unit %}</td>
+                            <td>{{ unit.life }}/{{ unit.get_max_life }}</td>
                         </tr>
                     {% endfor %}
                 </table>
