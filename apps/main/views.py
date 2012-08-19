@@ -164,6 +164,21 @@ def battle(request):
 @check_battle
 def postbattle(request):
 
+    hero = request.user.hero
+    try:
+        battle = Battle.objects.filter((Q(hero1=hero)&Q(hero1_seen_result=False))|(Q(hero2=hero)&Q(hero2_seen_result=False)))[0]
+    except Exception:
+        return redirect('profile')
 
+    if battle.winner == hero:
+        result = 'won'
+    else:
+        result = 'lose'
 
-    return render(request, 'main/postbattle.html',{'hero':request.user.hero})
+    Battle.objects.filter(hero1=hero, hero1_seen_result=False).update(hero1_seen_result=True)
+    Battle.objects.filter(hero2=hero, hero2_seen_result=False).update(hero2_seen_result=True)
+
+    return render(request, 'main/postbattle.html', {
+        'hero': hero,
+        'result': result
+    })

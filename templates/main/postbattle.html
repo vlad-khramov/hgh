@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="row center">
+        <h2>You {{ result }}</h2>
+        <br><br>
+        <a href="{% url prebattle %}" class="btn btn-large">Fight again</a>
+    </div>
+
+
+{% endblock %}
