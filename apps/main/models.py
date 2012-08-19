@@ -536,6 +536,7 @@ class Spell(models.Model):
                 ),
                 type=self.type
             ).save()
+        self.cnt -= 1
 
     def __unicode__(self):
         return self.type
