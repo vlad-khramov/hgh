@@ -344,6 +344,7 @@ class HeroEffect(models.Model):
     hero = models.ForeignKey(Hero, related_name='active_effects')
     duration = models.IntegerField(default=1)
     
+    value = models.IntegerField(default=1)
     type = models.CharField(max_length=200)
     param = models.CharField(max_length=50)
 
@@ -352,6 +353,7 @@ class UnitEffect(models.Model):
     unit = models.ForeignKey(Unit, related_name='active_effects')
     duration = models.IntegerField(default=1)
     
+    value = models.IntegerField(default=1)
     type = models.CharField(max_length=200)
     param = models.CharField(max_length=50)
 
@@ -365,8 +367,25 @@ class Spell(models.Model):
     cnt = models.IntegerField(default=1)
     
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
-        pass
-        
+        if self.type=='UnitBuf':
+            UnitEffect(
+                unit=target, 
+                duration=get_spell_duration(
+                    initiator.level, initiator.get_attentiveness()
+                ), 
+                type=self.type,
+                param=param
+            ).save()
+        elif self.type=='HeroBuf':
+            HeroEffect(
+                hero=target,
+                duration=get_spell_duration(
+                    initiator.level, initiator.get_attentiveness()
+                ), 
+                type=self.type, 
+                param=param
+            ).save()
+ 
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
 
