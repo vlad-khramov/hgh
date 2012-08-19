@@ -89,7 +89,7 @@ class Hero(models.Model):
 
     def add_experience(self, exp):
         self.experience += exp
-        HeroLog(hero=self, date=datetime.datetime.now(), text='%s gets %s experience' (self.login, exp)).save()
+        HeroLog(hero=self, date=datetime.datetime.now(), text='%s gets %s experience' % (self.login, exp)).save()
         if self.has_got_level():
             self.gain_level()
 
