@@ -278,6 +278,11 @@ class Unit(models.Model):
                     setattr(self, key, formulas.scale_prop(val, UNIT_PROP_LIMIT, PROPS_MAX[key]))
                 else:
                     setattr(self, key, val)
+                    
+    def is_immune_to(self, spell):
+        if self.active_effects.filter(type='TitanSkin').count()>0:
+            return true
+        return false
 
     def save(self, *args, **kwargs):
         self.attack_github = int(self.forks/2)
