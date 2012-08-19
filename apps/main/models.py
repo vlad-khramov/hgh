@@ -420,6 +420,14 @@ class Spell(models.Model):
     type = models.CharField(max_length=200)
     cnt = models.IntegerField(default=1)
 
+    def get_target_type(self):
+        if self.type in ['UnitBuf']:
+            return 'own_unit'
+        elif self.type in ['HeroBuf']:
+            return 'hero'
+        else:
+            return 'opponent_unit'
+
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
         LM = int(math.ceil(initiator.level*0.1))
         att_lower = int(initiator.get_attentiveness()*0.1)
@@ -507,13 +515,17 @@ class Spell(models.Model):
                 type=self.type
             ).save()
 
+    def __unicode__(self):
+        return self.type
+
+
 class CastingSpell(models.Model):
     """ A spell player chosen to cast """
     spell = models.ForeignKey(Spell, related_name='casts_in_process')
     
-    target_unit = models.ForeignKey(Unit, related_name='target_of_spells')
-    target_hero = models.ForeignKey(Hero, related_name='target_of_spells')
-    target_param = models.CharField(max_length=50)
+    target_unit = models.ForeignKey(Unit, related_name='target_of_spells', null=True, default=None)
+    target_hero = models.ForeignKey(Hero, related_name='target_of_spells', null=True, default=None)
+    target_param = models.CharField(max_length=50, default='')
 
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
