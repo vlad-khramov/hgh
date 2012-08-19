@@ -379,6 +379,15 @@ class Battle(models.Model):
 
         self.add_log_line(random.choice(strings) % hero)
 
+
+    def add_log_line_unit_defeated(self, unit):
+        strings = (
+            '<b>%s</b> defeated',
+            '<b>%s</b> is tired of life',
+        )
+
+        self.add_log_line(random.choice(strings) % unit)
+
     def add_log_line_new_round(self):
         self.add_log_line('=========== Round %s ===========' % self.round)
 

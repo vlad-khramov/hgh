@@ -47,7 +47,8 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
             damage = get_damage(unit.get_attack(), target.get_defence())
             target.life -= damage
             battle.add_log_line_hits(unit.custom_name, target.custom_name, damage)
-
+            if target.life<=0:
+                battle.add_log_line_unit_defeated(target.custom_name)
             target.changed = True
         else:
             battle.add_log_line_missing(unit.custom_name, target.custom_name)
