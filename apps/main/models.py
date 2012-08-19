@@ -439,7 +439,8 @@ class Spell(models.Model):
                 target.life -= random.randint(1, LM*2*att_upper)
                 target.save()
         elif self.type=='Fireball':
-            dmg = random.randint(int(LM*1.5), int(LM*1.7*att_upper))        
+            dmg = random.randint(int(LM*1.5), int(LM*1.7*att_upper))
+            half_dmg = max(int(dmg/2), 1)
             if not target.is_immune_to(self):
                 target.life -= dmg
                 target.save()
@@ -447,13 +448,37 @@ class Spell(models.Model):
             if pos_in_army>0:
                 target_upper = opponent_army[pos_in_army-1]
                 if not target_upper.is_immune_to(self):
-                    target_upper.life -= int(dmg/2)
+                    target_upper.life -= half_dmg
                     target_upper.save()
             if pos_in_army<len(opponent_army)-1:
                 target_lower = opponent_army[pos_in_army+1]
                 if not target_lower.is_immune_to(self):
-                    target_lower.life -= int(dmg/2)
+                    target_lower.life -= half_dmg
                     target_lower.save()
+        elif self.type=='ChainLightning':
+            dmg = random.randint(1, int(LM*2*att_upper))
+            target_cnt = 2+LM+att_lower
+            cur_target = target
+            pos_in_army = opponent_army.index(cur_target)
+            army_size = len(opponent_army)
+            direction = 0# this means need to detect
+            for i in xrange(target_cnt):
+                if not cur_target.is_immune_to(self):
+                    cur_target.life -= dmg
+                    cur_target.save()
+                dmg = max(1, int(dmg*0.7))
+                # logic of changing target must work only when > 1 unit in army
+                if (army_size>1):
+                    if (pos_in_army==0) or (pos_in_army==army_size-1):
+                        direction = 0
+                    if direction==0:
+                        #detect, where to go
+                        direction = 1 if (pos_in_army<int(armysize/2)) else -1
+                    pos_in_army += direction
+                    cur_target = opponent_army[pos_in_army]
+                            
+                        
+                
             
  
 
