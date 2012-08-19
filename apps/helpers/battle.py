@@ -44,7 +44,9 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
 
     for unit in hero1_army+hero2_army:
         target = army_dict[unit.battle_target_id]
-        if target.life>0 and is_hits(unit.get_attack(), target.get_defence()):
+        if target.life<=0:
+            continue
+        if is_hits(unit.get_attack(), target.get_defence()):
             damage = get_damage(unit.get_attack(), target.get_defence())
             target.life -= damage
             battle.add_log_line_hits(unit.custom_name, target.custom_name, damage)
