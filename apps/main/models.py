@@ -42,7 +42,12 @@ class Hero(models.Model):
     defence_own = models.IntegerField(default=0)
     attentiveness_own = models.IntegerField(default=0)
     charm_own = models.IntegerField(default=0)
-
+    
+    attack_race = models.IntegerField(default=0)
+    defence_race = models.IntegerField(default=0)
+    attentiveness_race = models.IntegerField(default=0)
+    charm_race = models.IntegerField(default=0)
+    
     race = models.CharField(max_length=100, default='')
 
     wins = models.IntegerField(default=0)
@@ -124,6 +129,10 @@ class Hero(models.Model):
         for stat, value in formulas.race_bonuses(self.race).items():
             setattr(self, stat+'_own', getattr(self, stat+'_own')+value)
 
+    def update_race_bonuses(self):
+        """ Recomputes race bonuses """
+        for stat, value in formulas.race_bonuses(self.race, self.level).iteritems():
+            setattr(self, stat+'_race', value)
 
     def update_army(self):
         """
