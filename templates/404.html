@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Page not fount</h1>
+    <h1>Page not found</h1>
     {% if not user.is_authenticated %}
         <h2>But you may <a href="/login/github/" class="btn btn-large">login with Github</a> and fight :)</h2>
     {% else %}
