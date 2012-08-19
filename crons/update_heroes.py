@@ -8,7 +8,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'hgh.local_settings'
 from apps.helpers.gh import get_user
 from apps.main.models import Hero
 
-for hero in Hero.objects.filter().order_by('last_update'):
+for hero in Hero.objects.filter().order_by('last_update')[:1000]:
     user_info = get_user(hero.login)
     if not user_info:
         continue
