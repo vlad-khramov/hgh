@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 from __future__ import division
 
 from math import ceil, floor

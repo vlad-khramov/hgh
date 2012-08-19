@@ -44,12 +44,12 @@ class Hero(models.Model):
     defence_own = models.IntegerField(default=0)
     attentiveness_own = models.IntegerField(default=0)
     charm_own = models.IntegerField(default=0)
-    
+
     attack_race = models.IntegerField(default=0)
     defence_race = models.IntegerField(default=0)
     attentiveness_race = models.IntegerField(default=0)
     charm_race = models.IntegerField(default=0)
-    
+
     race = models.CharField(max_length=100, default='')
 
     wins = models.IntegerField(default=0)
@@ -122,7 +122,7 @@ class Hero(models.Model):
     def update_race(self):
         """
         Updates race of hero (most popular race from units) and adds race bonuses.
-        
+
         Race is set only once (after registration).
         """
         if self.race: return
@@ -139,10 +139,10 @@ class Hero(models.Model):
         """ Recomputes race bonuses """
         for stat, value in formulas.race_bonuses(self.race, self.level).iteritems():
             setattr(self, stat+'_race', value)
-            
+
     def get_minimal_stat(self):
         """ Returns name of the smallest hero stat.
-        
+
         If there are several such stats, returns attacking one. If both are
         attacking or none of the minimal are attacking, returns random of them.
         """
@@ -169,11 +169,11 @@ class Hero(models.Model):
         self.update_race_bonuses()
         min_stat = self.get_minimal_stat()
         setattr(
-            self, 
-            min_stat+'_own', 
+            self,
+            min_stat+'_own',
             getattr(self, min_stat+'_own')+LM
         )
-    
+
     def has_got_level(self):
         return self.experience >= formulas.dsu(self.level)
 
@@ -275,14 +275,14 @@ class Unit(models.Model):
             'forks': 5000,
             'watchers': 17000,
             'open_issues': 600,
-        }
+            }
         for key, val in response.items():
             if key != 'id' and not val is None and hasattr(self, key):
                 if key in PROPS_MAX:
                     setattr(self, key, formulas.scale_prop(val, UNIT_PROP_LIMIT, PROPS_MAX[key]))
                 else:
                     setattr(self, key, val)
-                    
+
     def is_immune_to(self, spell):
         if self.active_effects.filter(type='TitanSkin').count()>0:
             return true
@@ -400,7 +400,7 @@ class HeroEffect(models.Model):
     """ Spell affecting hero for a period. """
     hero = models.ForeignKey(Hero, related_name='active_effects')
     duration = models.IntegerField(default=1)
-    
+
     value = models.IntegerField(default=1)
     type = models.CharField(max_length=200)
     param = models.CharField(max_length=50)
@@ -409,7 +409,7 @@ class UnitEffect(models.Model):
     """ Spell affecting unit for a period. """
     unit = models.ForeignKey(Unit, related_name='active_effects')
     duration = models.IntegerField(default=1)
-    
+
     value = models.IntegerField(default=1)
     type = models.CharField(max_length=200)
     param = models.CharField(max_length=50)
@@ -422,14 +422,14 @@ class Spell(models.Model):
 
     type = models.CharField(max_length=200)
     cnt = models.IntegerField(default=1)
-    
+
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
         LM = int(math.ceil(initiator.level*0.1))
         att_lower = int(initiator.get_attentiveness()*0.1)
         att_upper = int(math.ceil(initiator.get_attentiveness*0.1))
         if self.type=='UnitBuf':
             UnitEffect(
-                unit=target, 
+                unit=target,
                 duration=get_spell_duration(
                     initiator.level, initiator.get_attentiveness()
                 ),
@@ -442,11 +442,11 @@ class Spell(models.Model):
                 hero=target,
                 duration=get_spell_duration(
                     initiator.level, initiator.get_attentiveness()
-                ), 
+                ),
                 value=LM+att_lower,
-                type=self.type, 
+                type=self.type,
                 param=param
-            ).save()        
+            ).save()
         elif self.type=='Lightning':
             if not target.is_immune_to(self):
                 target.life -= random.randint(1, LM*2*att_upper)
@@ -491,26 +491,26 @@ class Spell(models.Model):
                     cur_target = opponent_army[pos_in_army]
         elif self.type=='TitanSkin':
             UnitEffect(
-                unit=target, 
+                unit=target,
                 duration=1,
                 type=self.type
             ).save()
         elif self.type=='Amnezia':
             UnitEffect(
-                unit=target, 
+                unit=target,
                 duration=1,
                 type=self.type
             ).save()
         elif self.type=='ThornsAura':
             UnitEffect(
-                unit=target, 
+                unit=target,
                 duration=get_spell_duration(
                     initiator.level, initiator.get_attentiveness()
-                ), 
+                ),
                 type=self.type
             ).save()
 
- 
+
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
 
