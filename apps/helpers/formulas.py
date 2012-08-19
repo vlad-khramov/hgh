@@ -47,13 +47,14 @@ def get_damage(attack, defence):
     return 1 if dmg<1 else dmg
 
 def get_exp(hero, opponent, win = True):
-    """ Returns experience for hero, derivable in battle """
+    """ Returns experience hero gained in battle """
     if win:
-        return math.ceil(min(10, 2*opponent.get_total_power()/hero.get_total_power()))
+        return min(10, int(2*opponent.get_total_power()/hero.get_total_power()))
     else:
         return 0 if opponent.get_total_power() < hero.get_total_power() else 1
 
-
+def get_spell_duration(level, attentiveness):
+    return int(1.5*math.ceil(0.1*level))+int(attentiveness*0.1)
 
 def scale_prop(prop, prop_limit, prop_max=16000):
     """ Scales down account and repos properties.
