@@ -161,6 +161,7 @@ class Hero(models.Model):
         # computing Level Multiplier *before* level changing
         LM = int(math.ceil(0.1*self.level))
         self.level += 1
+        self.experience = 0
         self.update_race_bonuses()
         min_stat = self.get_minimal_stat()
         setattr(
