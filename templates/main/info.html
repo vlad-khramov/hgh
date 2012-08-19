@@ -13,8 +13,12 @@
         </div>
     </div>
     <div class="row">
-        {% for unit in hero.units.all %}
-            {% unitline unit %}<br>
-        {% endfor %}
+        <table class="table" style="margin-top: 20px;">
+            {% for unit in hero.units.all %}
+                <tr>
+                    <td>{% unitline unit %}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}
