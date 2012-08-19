@@ -132,8 +132,6 @@ class Hero(models.Model):
         else:
             units = Unit.objects.filter(hero=self)
             self.race = Counter([unit.race for unit in units]).most_common()[0][0]
-        for stat, value in formulas.race_bonuses(self.race).items():
-            setattr(self, stat+'_own', getattr(self, stat+'_own')+value)
 
     def update_race_bonuses(self):
         """ Recomputes race bonuses """
@@ -414,7 +412,6 @@ class UnitEffect(models.Model):
     type = models.CharField(max_length=200)
     param = models.CharField(max_length=50)
 
-
 class Spell(models.Model):
     """a spell that `hero` can cast"""
 
@@ -510,6 +507,13 @@ class Spell(models.Model):
                 type=self.type
             ).save()
 
+class CastingSpell(models.Model):
+    """ A spell player chosen to cast """
+    spell = models.ForeignKey(Spell, related_name='casts_in_process')
+    
+    target_unit = models.ForeignKey(Unit, related_name='target_of_spells')
+    target_hero = models.ForeignKey(Hero, related_name='target_of_spells')
+    target_param = models.CharField(max_length=50)
 
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
