@@ -14,7 +14,7 @@
             <a href="{% url battle %}?runaway" class="btn btn-large">Run away</a>
         </div>
 
-        <div class="row">
+        <div class="row"style="margin-top: 10px;">
             <div class="span4">
                 {% include 'main/battle/hero_info.html' %}
                 <table class="table" style="margin-top: 20px;">
@@ -47,8 +47,9 @@
 
 
             </div>
-            <div class="span4">
-                &nbsp;
+            <div class="span4 center">
+                <h2>Battle log</h2>
+                {{ battle.log|safe|linebreaksbr }}
             </div>
             <div class="span4 pull-right">
                 {% with hero=opponent %}

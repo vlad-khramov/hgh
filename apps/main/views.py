@@ -75,6 +75,7 @@ def prebattle(request):
             date=datetime.datetime.now(),
             is_active=True
         )
+        battle.add_log_line_new_round()
         battle.save()
         for unit in Unit.objects.filter(Q(hero=request.user.hero)|Q(hero=opponent)):
             unit.life = unit.get_max_life()
@@ -157,7 +158,8 @@ def battle(request):
         'is_moved': is_moved,
 
         'opponent': opponent,
-        'opponent_army': opponent_army
+        'opponent_army': opponent_army,
+        'battle': battle
     })
 
 @login_required
@@ -180,5 +182,6 @@ def postbattle(request):
 
     return render(request, 'main/postbattle.html', {
         'hero': hero,
-        'result': result
+        'result': result,
+        'battle': battle
     })

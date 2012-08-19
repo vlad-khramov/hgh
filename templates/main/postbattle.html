@@ -8,5 +8,9 @@
         <a href="{% url prebattle %}" class="btn btn-large">Fight again</a>
     </div>
 
+    <div class="row center" style="margin-top: 30px">
+        {{ battle.log|safe|linebreaksbr }}
+    </div>
+
 
 {% endblock %}
