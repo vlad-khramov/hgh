@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    <form target="." method="POST">
+    <form action="." method="POST">
         {% csrf_token %}
         <div class="row center">
             {% if is_moved %}
