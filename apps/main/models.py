@@ -193,7 +193,7 @@ class Unit(models.Model):
     charm_github = models.IntegerField(default=0)
 
     life = models.IntegerField(default=0)
-    
+
     battle_target = models.ForeignKey('self', null=True, default=None)
 
     def _get_stat(self, stat):
