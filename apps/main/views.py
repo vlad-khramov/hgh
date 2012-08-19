@@ -78,6 +78,8 @@ def prebattle(request):
         battle.save()
         for unit in Unit.objects.filter(Q(hero=request.user.hero)|Q(hero=opponent)):
             unit.life = unit.get_max_life()
+            unit.battle_target=None
+            unit.save()
 
         BattleQueue.objects.filter(hero__in=[request.user.hero, opponent]).delete()
 
@@ -100,13 +102,18 @@ def prebattle(request):
 
 @login_required
 def battle(request):
-    battle = request.user.hero.get_battle()
     hero = request.user.hero
-    army = hero.units.select_related()
-    army_dict = dict([(unit.pk,unit) for unit in army])
+    battle = request.user.hero.get_battle()
+    if battle is None:
+        if Battle.objects.filter((Q(hero1=hero)&Q(hero1_seen_result=False))|(Q(hero2=hero)&Q(hero2_seen_result=False))).count()>0:
+            return redirect('postbattle')
+        else:
+            return redirect('profile')
+
+    army = list(hero.units.select_related())
 
     opponent = battle.get_opponent(hero)
-    opponent_army = opponent.units.select_related()
+    opponent_army = list(opponent.units.select_related())
     opponent_army_dict = dict([(unit.pk,unit) for unit in opponent_army])
 
     if battle is None:
@@ -136,13 +143,13 @@ def battle(request):
 
         battle.set_moved(hero, True)
         battle.save()
+        is_moved = True
 
-    if battle.hero1_moved and battle.hero1_moved:
+    if battle.hero1_moved and battle.hero2_moved:
         process_move(battle, hero, opponent, army, opponent_army)
 
-
-
-
+    if not battle.is_active:
+        return redirect('postbattle')
 
     return render(request, 'main/battle.html', {
         'hero': hero,
@@ -156,4 +163,7 @@ def battle(request):
 @login_required
 @check_battle
 def postbattle(request):
+
+
+
     return render(request, 'main/postbattle.html',{'hero':request.user.hero})
