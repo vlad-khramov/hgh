@@ -299,7 +299,11 @@ class Unit(models.Model):
 
         super(Unit, self).save(*args, **kwargs)
 
-
+class Event(models.Model):
+    user = models.ForeignKey(User, related_name='github_events')
+    
+    type = models.CharField(max_length=50)
+    date = models.DateTimeField()
 
 class BattleQueue(models.Model):
     """Queue of heroes, waiting battle"""
