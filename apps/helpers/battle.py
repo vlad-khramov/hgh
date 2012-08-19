@@ -42,6 +42,13 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         spell1 = CastingSpell.objects.filter(spell__hero=hero1)[0]
         target1 = spell1.target_unit if spell1.target_unit is not None else spell1.target_hero
         buf1 = spell1.spell.produces_effect()
+
+        try:
+            spell2 = CastingSpell.objects.filter(spell__hero=hero2)[0]
+            buf2 = spell2.spell.produces_effect()
+        except Exception:
+            buf2 = False
+
         if buf1 and not buf2:
             spell1.spell.cast(hero1, hero1_army, hero2, hero2_army, target1, spell1.target_param)
         else:
@@ -54,8 +61,14 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
     try:
         spell2 = CastingSpell.objects.filter(spell__hero=hero2)[0]
         target2 = spell2.target_unit if spell2.target_unit is not None else spell2.target_hero
-
         buf2 = spell2.spell.produces_effect()
+
+        try:
+            spell1 = CastingSpell.objects.filter(spell__hero=hero1)[0]
+            buf1 = spell1.spell.produces_effect()
+        except Exception:
+            buf1 = False
+
         # bufs should be processed before instants since
         # the former can supply unit with immunity
         if buf1 and not buf2:
