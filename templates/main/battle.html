@@ -4,6 +4,11 @@
 
 {% block content %}
     <div class="row center">
+        {% if is_moved %}
+            <a href="{% url battle %}" class="btn btn-large">Refresh</a>
+        {% else %}
+            <input type="submit" class="btn btn-large" value="Move!">
+        {% endif %}
         <a href="{% url battle %}?runaway" class="btn btn-large">Run away</a>
     </div>
 
