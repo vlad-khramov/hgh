@@ -10,10 +10,10 @@
             if($(this).val()) {
                 $.getJSON('/spellgettargets/'+$(this).val()+'/', function(data) {
                     $.each(data['param'], function(i, value) {
-                        $('#param').append($('<option>').text(value).attr('value', value));
+                        $('#param').append($('<option>').text(value).attr('value', i));
                     });
                     $.each(data['target'], function(i, value) {
-                        $('#target').append($('<option>').text(value).attr('value', value));
+                        $('#target').append($('<option>').text(value).attr('value', i));
                     });
                 });
             }
@@ -39,7 +39,7 @@
             <div class="span4">
                 {% include 'main/battle/hero_info.html' %}
                 <hr>
-                {% if spells %}
+                {% if spells and not is_moved %}
                     <table>
                         <tr>
                             <td>Cast spell&nbsp;</td>
@@ -69,6 +69,10 @@
                             </td>
                         </tr>
                     </table>
+                {% endif %}
+
+                {% if casted_spell and is_moved %}
+                    {{ casted_spell }}
                 {% endif %}
 
                 <table class="table">

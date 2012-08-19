@@ -141,7 +141,7 @@ def battle(request):
         try:
             spell = Spell.objects.get(hero=hero, pk=request.POST['spell'])
         except Exception:
-            pass #ignoring all reasons, why spell is empty (not selected, hacking attempt, etc)
+            spell = None #ignoring all reasons, why spell is empty (not selected, hacking attempt, etc)
 
         if spell:
             if spell.get_target_type()=='own_unit' \
@@ -193,11 +193,22 @@ def battle(request):
 
     spells = hero.spells.all()
     opponent_spells = opponent.spells.all()
+    try:
+        casted_spell = CastingSpell.objects.select_related().get(spell__in=spells)
+        target = casted_spell.target_unit.custom_name if casted_spell.target_unit else casted_spell.target_hero.login
+        param = casted_spell.target_param
+        casted_spell = ("casted %s to %s" % (casted_spell.spell.type, target))\
+                     + (' to param %s' % param if param else '')
+
+    except Exception:
+        casted_spell = ''
+
     return render(request, 'main/battle.html', {
         'hero': hero,
         'army': army,
         'spells': spells,
         'is_moved': is_moved,
+        'casted_spell': casted_spell,
 
         'opponent': opponent,
         'opponent_army': opponent_army,
