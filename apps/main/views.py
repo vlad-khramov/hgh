@@ -178,6 +178,7 @@ def battle(request):
 
 @login_required()
 def get_target(request, id):
+    """ Returns to js target and params for selected spell """
     hero = request.user.hero
     battle = hero.get_battle()
     if battle is None:
