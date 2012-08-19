@@ -4,6 +4,13 @@ from __future__ import division
 from math import ceil, floor
 import random
 
+def dsu(level):
+    """ Returns experince needed to reach next level.
+    
+    `level` is *current* level of a hero.
+    """
+    return level*10
+
 def get_hit_chance(attack, defence, missRequired=True):
     """ Computes hit chance [0..1] based on attack and defence stat """
     chance = 1
