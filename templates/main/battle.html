@@ -1,30 +1,66 @@
 {% extends 'base.html' %}
-{% load hero_main_info %}
+{% load unitline %}
 
 
 {% block content %}
-    <div class="row center">
-        {% if is_moved %}
-            <a href="{% url battle %}" class="btn btn-large">Refresh</a>
-        {% else %}
-            <input type="submit" class="btn btn-large" value="Move!">
-        {% endif %}
-        <a href="{% url battle %}?runaway" class="btn btn-large">Run away</a>
-    </div>
+    <form target="." method="POST">
+        {% csrf_token %}
+        <div class="row center">
+            {% if is_moved %}
+                <a href="{% url battle %}" class="btn btn-large">Refresh</a>
+            {% else %}
+                <input type="submit" class="btn btn-large" value="Move!" name="move">
+            {% endif %}
+            <a href="{% url battle %}?runaway" class="btn btn-large">Run away</a>
+        </div>
 
-    <div class="row">
-        <div class="span4">
-            {% include 'main/battle/hero_info.html' %}
-        </div>
-        <div class="span4">
-            &nbsp;
-        </div>
-        <div class="span4 pull-right">
-            {% with hero=opponent %}
+        <div class="row">
+            <div class="span4">
                 {% include 'main/battle/hero_info.html' %}
-            {% endwith %}
-        </div>
-    </div>
+                <table class="table" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>target</th>
+                        </tr>
+                    </thead>
+                    {% for unit in army %}
+                        <tr>
+                            <td>{% unitline unit %}</td>
+                            {% if is_moved %}
+                                <td>{{ unit.battle_target.custom_name }}</td>
+                            {% else %}
+                                <td>
+                                    <select name="unit{{ unit.pk }}">
+                                        <option value="0">Auto select</option>
+                                        {% for op_unit in opponent_army %}
+                                            <option value="{{ op_unit.pk }}">{{ op_unit.custom_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
 
+
+            </div>
+            <div class="span4">
+                &nbsp;
+            </div>
+            <div class="span4 pull-right">
+                {% with hero=opponent %}
+                    {% include 'main/battle/hero_info.html' %}
+                {% endwith %}
+                <table class="table" style="margin-top: 20px;">
+                    {% for unit in opponent_army %}
+                        <tr>
+                            <td>{% unitline unit %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    <form>
 
 {% endblock %}

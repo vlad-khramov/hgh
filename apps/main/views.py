@@ -1,9 +1,12 @@
 #coding: utf-8
+import random
 from django.contrib.auth.decorators import login_required
+from django.db.models.query_utils import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from apps.helpers.battle import process_move
 from apps.main.decorators import check_battle
-from apps.main.models import Hero, BattleQueue, Battle
+from apps.main.models import Hero, BattleQueue, Battle, Unit
 import datetime
 from apps.simplepagination import simple_paginate
 
@@ -62,7 +65,10 @@ def prebattle(request):
 
     try:
         opponent = BattleQueue.objects.exclude(hero=request.user.hero)[0].hero
-        #opponent exists, start battle
+    except Exception:
+        opponent = None
+
+    if opponent: #opponent exists, start battle
         battle = Battle(
             hero1=request.user.hero,
             hero2=opponent,
@@ -70,11 +76,12 @@ def prebattle(request):
             is_active=True
         )
         battle.save()
+        for unit in Unit.objects.filter(Q(hero=request.user.hero)|Q(hero=opponent)):
+            unit.life = unit.get_max_life()
+
         BattleQueue.objects.filter(hero__in=[request.user.hero, opponent]).delete()
 
         return redirect('battle')
-    except Exception:
-        pass
 
 
 
@@ -94,20 +101,56 @@ def prebattle(request):
 @login_required
 def battle(request):
     battle = request.user.hero.get_battle()
+    hero = request.user.hero
+    army = hero.units.select_related()
+    army_dict = dict([(unit.pk,unit) for unit in army])
+
+    opponent = battle.get_opponent(hero)
+    opponent_army = opponent.units.select_related()
+    opponent_army_dict = dict([(unit.pk,unit) for unit in opponent_army])
+
     if battle is None:
         return redirect('profile')
 
     if 'runaway' in request.GET:
         battle.is_active=False
-        battle.winner = battle.get_opponent(request.user.hero)
+        battle.winner = battle.get_opponent(hero)
         battle.save()
 
         return redirect('profile')
 
+    is_moved = battle.is_moved(hero)
+
+    if 'move' in request.POST and not is_moved:
+        for unit in army:
+            try:
+                target = int(request.POST['unit%s'%unit.pk])
+            except Exception:
+                target = 0
+
+            if not target or not target in opponent_army_dict.keys():
+                target = random.choice(opponent_army_dict.keys())
+
+            unit.battle_target_id = target
+            unit.save()
+
+        battle.set_moved(hero, True)
+        battle.save()
+
+    if battle.hero1_moved and battle.hero1_moved:
+        process_move(battle, hero, opponent, army, opponent_army)
+
+
+
+
+
     return render(request, 'main/battle.html', {
-        'hero':request.user.hero,
-        'opponent':battle.get_opponent(request.user.hero),
-        'is_moved':battle.is_moved(request.user.hero)
+        'hero': hero,
+        'army': army,
+        'is_moved': is_moved,
+
+        'opponent': opponent,
+        'opponent_army': opponent_army
     })
 
 @login_required
