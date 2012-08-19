@@ -450,6 +450,9 @@ class Spell(models.Model):
         else:
             return 'opponent_unit'
 
+    def produces_effect(self):
+        return self.type in ['UnitBuf', 'HeroBuf', 'TitanSkin', 'Amnezia', 'ThornsAura']
+
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
         LM = int(math.ceil(initiator.level*0.1))
         att_lower = int(initiator.get_attentiveness()*0.1)
