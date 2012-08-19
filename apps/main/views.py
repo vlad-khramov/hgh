@@ -111,10 +111,10 @@ def battle(request):
         else:
             return redirect('profile')
 
-    army = list(hero.units.select_related())
+    army = list(hero.units.select_related().filter(life>0))
 
     opponent = battle.get_opponent(hero)
-    opponent_army = list(opponent.units.select_related())
+    opponent_army = list(opponent.units.select_related().filter(life>0))
     opponent_army_dict = dict([(unit.pk,unit) for unit in opponent_army])
 
     if battle is None:
@@ -131,6 +131,8 @@ def battle(request):
 
     if 'move' in request.POST and not is_moved:
         for unit in army:
+            if unit.life<=0:
+                continue
             try:
                 target = int(request.POST['unit%s'%unit.pk])
             except Exception:
