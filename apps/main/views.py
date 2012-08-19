@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import simplejson
 from apps.helpers.battle import process_move
 from apps.main.decorators import check_battle
-from apps.main.models import Hero, BattleQueue, Battle, Unit, Spell
+from apps.main.models import Hero, BattleQueue, Battle, Unit, Spell, CastingSpell
 import datetime
 from apps.simplepagination import simple_paginate
 
@@ -138,6 +138,35 @@ def battle(request):
     is_moved = battle.is_moved(hero)
 
     if 'move' in request.POST and not is_moved:
+        try:
+            spell = Spell.objects.get(hero=hero, pk=request.POST['spell'])
+        except Exception:
+            pass #ignoring all reasons, why spell is empty (not selected, hacking attempt, etc)
+
+        if spell:
+            if spell.get_target_type()=='own_unit' \
+                and 'param' in request.POST \
+                and request.POST['param'] in ('attack','defence','attentiveness','charm'):
+                try:
+                    unit = Unit.objects.get(hero=hero,pk=request.POST['target'])
+                    CastingSpell(spell=spell, target_unit=unit, target_param=request.POST['param']).save()
+                except Exception:
+                    pass
+            if spell.get_target_type()=='hero'\
+                and 'param' in request.POST\
+                and request.POST['param'] in ('attack','defence','attentiveness','charm'):
+                try:
+                    CastingSpell(spell=spell, target_hero=hero, target_param=request.POST['param']).save()
+                except Exception:
+                    pass
+            if spell.get_target_type()=='opponent_unit':
+                try:
+                    unit = Unit.objects.get(hero=opponent,pk=request.POST['target'])
+                    CastingSpell(spell=spell, target_unit=unit).save()
+                except Exception:
+                    pass
+
+
         for unit in army:
             if unit.life<=0:
                 continue
