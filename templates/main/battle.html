@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 {% load unitline %}
 
+{% block javascript %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#spell").change(function(){
+            $('#param').empty();
+            $('#target').empty();
+            if($(this).val()) {
+                $.getJSON('/spellgettargets/'+$(this).val()+'/', function(data) {
+                    $.each(data['param'], function(i, value) {
+                        $('#param').append($('<option>').text(value).attr('value', value));
+                    });
+                    $.each(data['target'], function(i, value) {
+                        $('#target').append($('<option>').text(value).attr('value', value));
+                    });
+                });
+            }
+        })
+    })
+</script>
+{% endblock %}
+
 
 {% block content %}
     <form action="." method="POST">
@@ -19,14 +40,35 @@
                 {% include 'main/battle/hero_info.html' %}
                 <hr>
                 {% if spells %}
-                Cast spell
-                <select name="spell">
-                    <option value="0">None</option>
-                    {% for spell in spells %}
-                        <option value="spell.pk">{{ spell }}</option>
-                    {% endfor %}
-                </select>
-                <hr>
+                    <table>
+                        <tr>
+                            <td>Cast spell&nbsp;</td>
+                            <td>
+                                <select name="spell" id="spell">
+                                    <option value="0">None</option>
+                                    {% for spell in spells %}
+                                        <option value="{{ spell.pk }}">{{ spell }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>to target</td>
+                            <td>
+                                <select name="target" id="target">
+
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>to param</td>
+                            <td>
+                                <select name="param" id="param">
+
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
                 {% endif %}
 
                 <table class="table">

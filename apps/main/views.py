@@ -186,17 +186,26 @@ def get_target(request, id):
     spell = get_object_or_404(Spell,hero=hero, pk=id)
     t_type = spell.get_target_type()
     result = dict()
-    if t_type in ['hero', 'own_unit']:
-        result['params'] = {
+
+    if t_type in ['hero']:
+        result['target'] = {hero.pk:hero.login}
+        result['param'] = {
             'attack':'attack',
             'defence':'defence',
             'attentiveness':'attentiveness',
             'charm':'charm'
         }
-    elif t_type in ['own_unit']:
+    if t_type in ['own_unit']:
         result['target'] = dict([(unit.pk,unit.custom_name) for unit in hero.units.filter(life__gt=0)])
+        result['param'] = {
+            'attack':'attack',
+            'defence':'defence',
+            'attentiveness':'attentiveness',
+            'charm':'charm'
+        }
     elif t_type in ['opponent_unit']:
         result['target'] = dict([(unit.pk,unit.custom_name) for unit in battle.get_opponent(hero).units.filter(life__gt=0)])
+        result['param'] = {}
 
     return HttpResponse(simplejson.dumps(result), mimetype='application/json')
 
