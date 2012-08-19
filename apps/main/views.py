@@ -124,7 +124,7 @@ def battle(request):
         battle.winner = battle.get_opponent(hero)
         battle.save()
 
-        return redirect('profile')
+        return redirect('postbattle')
 
     is_moved = battle.is_moved(hero)
 
