@@ -3,6 +3,7 @@ from __future__ import division
 
 from math import ceil, floor
 import random
+import math
 
 def dsu(level):
     """ Returns experince needed to reach next level.
@@ -48,7 +49,7 @@ def get_damage(attack, defence):
 def get_exp(hero, opponent, win = True):
     """ Returns experience for hero, derivable in battle """
     if win:
-        return min(10, 2*opponent.get_total_power()/hero.get_total_power())
+        return math.ceil(min(10, 2*opponent.get_total_power()/hero.get_total_power()))
     else:
         return 0 if opponent.get_total_power() < hero.get_total_power() else 1
 
