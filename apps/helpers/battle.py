@@ -47,6 +47,7 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         else:
         # cases of both instants, both bufs and inverse of first case are at this branch
             spell1.spell.cast(hero1, hero1_army, hero2, hero2_army, target1, spell1.target_param)
+        spell1.spell.save()
     except Exception:
         pass
 
@@ -62,6 +63,7 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         else:
             # cases of both instants, both bufs and inverse of first case are at this branch
             spell2.spell.cast(hero2, hero2_army, hero1, hero1_army, target2, spell2.target_param)
+        spell2.spell.save()
     except Exception:
         pass
 
