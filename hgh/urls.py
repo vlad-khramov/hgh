@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     url(r'^battle/$', 'apps.main.views.battle', name='battle'),
     url(r'^battleresult/$', 'apps.main.views.postbattle', name='postbattle'),
 
+    url(r'^spellgettargets/(?P<id>\d+)/$', 'apps.main.views.get_target', name='spellgettargets'),
+
     url(r'^battleinfo/(?P<id>\d+)/$', 'apps.main.views.battle_info', name='battle_info'),
 
     url(r'^info/(?P<login>[^/]+)/$', 'apps.main.views.info', name='info'),

@@ -23,7 +23,7 @@
                 <select name="spell">
                     <option value="0">None</option>
                     {% for spell in spells %}
-
+                        <option value="spell.pk">{{ spell }}</option>
                     {% endfor %}
                 </select>
                 <hr>

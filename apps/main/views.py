@@ -2,11 +2,12 @@
 import random
 from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import simplejson
 from apps.helpers.battle import process_move
 from apps.main.decorators import check_battle
-from apps.main.models import Hero, BattleQueue, Battle, Unit
+from apps.main.models import Hero, BattleQueue, Battle, Unit, Spell
 import datetime
 from apps.simplepagination import simple_paginate
 
@@ -174,6 +175,33 @@ def battle(request):
         'opponent_spells': opponent_spells,
         'battle': battle
     })
+
+@login_required()
+def get_target(request, id):
+    hero = request.user.hero
+    battle = hero.get_battle()
+    if battle is None:
+        raise Http404
+
+    spell = get_object_or_404(Spell,hero=hero, pk=id)
+    t_type = spell.get_target_type()
+    result = dict()
+    if t_type in ['hero', 'own_unit']:
+        result['params'] = {
+            'attack':'attack',
+            'defence':'defence',
+            'attentiveness':'attentiveness',
+            'charm':'charm'
+        }
+    elif t_type in ['own_unit']:
+        result['target'] = dict([(unit.pk,unit.custom_name) for unit in hero.units.filter(life__gt=0)])
+    elif t_type in ['opponent_unit']:
+        result['target'] = dict([(unit.pk,unit.custom_name) for unit in battle.get_opponent(hero).units.filter(life__gt=0)])
+
+    return HttpResponse(simplejson.dumps(result), mimetype='application/json')
+
+
+
 
 @login_required
 @check_battle
