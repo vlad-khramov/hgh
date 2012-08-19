@@ -421,7 +421,7 @@ class Spell(models.Model):
     cnt = models.IntegerField(default=1)
 
     def get_target_type(self):
-        if self.type in ['UnitBuf']:
+        if self.type in ['UnitBuf', 'TitanSkin', 'ThornsAura']:
             return 'own_unit'
         elif self.type in ['HeroBuf']:
             return 'hero'
