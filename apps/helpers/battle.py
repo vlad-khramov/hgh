@@ -16,10 +16,10 @@ def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
         battle.winner = opponent
 
         opponent.wins += 1
-        opponent.experience = get_exp(opponent, hero, True)
+        opponent.experience += get_exp(opponent, hero, True)
     else:
         opponent.losses += 1
-        opponent.experience = get_exp(opponent, hero, False)
+        opponent.experience += get_exp(opponent, hero, False)
 
     hero.losses +=1
     hero.experience = get_exp(hero, opponent, False)
