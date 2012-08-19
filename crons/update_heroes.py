@@ -8,7 +8,7 @@ import datetime
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'hgh.local_settings'
 from apps.helpers.gh import get_user
-from apps.main.models import Hero
+from apps.main.models import Hero, Event, Spell, HeroLog
 from apps.helpers.gh import get_events
 
 IGNORED_EVENTS = (
@@ -33,13 +33,18 @@ def produce_spells(hero, event_list):
         Event.objects.create(
             user=hero.user, type=ev_type, date=event_dict['created_at']
         )
+        spell_type=EVENT_TO_SPELL.get(ev_type, 'UnknownSpell')
         obj, created = Spell.objects.get_or_create(
             hero=hero, 
-            type=EVENT_TO_SPELL.get(ev_type, 'UnknownSpell')
+            type=spell_type
         )
-        if not created:
+
+        if created:
+            HeroLog(hero=hero, date=event_dict['created_at'], text='%s learned new spell: %s ' % (hero.login, spell_type)).save()
+        else:
             obj.cnt += 1
             obj.save()
+            HeroLog(hero=hero, date=event_dict['created_at'], text='%s adds %s to spellbook' % (hero.login, spell_type)).save()
         
 for hero in Hero.objects.filter().order_by('last_update')[:1000]:
     user_info = get_user(hero.login)
@@ -50,10 +55,10 @@ for hero in Hero.objects.filter().order_by('last_update')[:1000]:
     hero.update_army()
     hero.save()
     try:
-        newest_date = Event.objects.filter(user=hero.user).order_by('-date')[0]
+        newest_date = Event.objects.filter(user=hero.user).order_by('-date')[0].date
     except IndexError:
         newest_date = datetime.datetime(2000, 01, 01)
     produce_spells(hero, [
-        evt for evt in get_events()
-        if evt['created_at']>=newest_date and evt['type'] not in IGNORED_EVENTS
+        evt for evt in get_events(hero.login)
+        if evt['created_at']>newest_date and evt['type'] not in IGNORED_EVENTS
     ])
