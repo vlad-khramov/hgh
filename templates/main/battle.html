@@ -17,7 +17,19 @@
         <div class="row"style="margin-top: 10px;">
             <div class="span4">
                 {% include 'main/battle/hero_info.html' %}
-                <table class="table" style="margin-top: 20px;">
+                <hr>
+                {% if spells %}
+                Cast spell
+                <select name="spell">
+                    <option value="0">None</option>
+                    {% for spell in spells %}
+
+                    {% endfor %}
+                </select>
+                <hr>
+                {% endif %}
+
+                <table class="table">
                     <thead>
                         <tr>
                             <th></th>

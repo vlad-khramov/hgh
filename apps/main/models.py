@@ -13,7 +13,7 @@ from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
 
 from apps.helpers import gh, formulas
-
+from apps.helpers.formulas import get_spell_duration
 
 
 class Hero(models.Model):
