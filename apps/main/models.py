@@ -2,14 +2,16 @@
 from __future__ import division
 
 import datetime
-from django.contrib.auth.models import User
-from django.db import models
 import math
 from collections import Counter
+import random
 
 from django.db.models.query_utils import Q
+from django.contrib.auth.models import User
+from django.db import models
 from social_auth.backends.contrib.github import GithubBackend
 from social_auth.signals import pre_update
+
 from apps.helpers import gh, formulas
 
 
@@ -133,6 +135,28 @@ class Hero(models.Model):
         """ Recomputes race bonuses """
         for stat, value in formulas.race_bonuses(self.race, self.level).iteritems():
             setattr(self, stat+'_race', value)
+            
+    def get_minimal_stat(self):
+        """ Returns name of the smallest hero stat.
+        
+        If there are several such stats, returns attacking one. If both are
+        attacking or none of the minimal are attacking, returns random of them.
+        """
+        stats_dict = {'attack': 0, 'defence': 0, 'attentiveness': 0, 'charm': 0}
+        for stat in stats_dict:
+            stats_dict[stat] = self._get_stat(stat)
+        min_value = min(stats_dict.itervalues())
+        min_stats = [k for k in stats_dict if stats_dict[k]==min_value]
+        if len(min_stats)==1:
+            return min_stats[0]
+        elif ('attack' in min_stats and 'attentiveness' not in min_stats):
+            return 'attack'
+        elif ('attack' in min_stats and 'attentiveness' not in min_stats):
+            return 'attentiveness'
+        else:
+            return random.choice(min_stats)
+
+
 
     def update_army(self):
         """
