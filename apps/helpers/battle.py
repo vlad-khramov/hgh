@@ -5,7 +5,7 @@ from apps.main.models import Unit
 
 def check_defeat(army):
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
-    return any([unit.life > 0 for unit in army])
+    return all([unit.life <= 0 for unit in army])
 
 def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
     """ Ends battle with loosing of one or more heroes"""
