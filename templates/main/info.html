@@ -16,10 +16,11 @@
             </table>
         </div>
         <div class="span6">
+            <h3>Battles:</h3>
             <table class="table">
                 {% for battle in battles %}
                     <tr>
-                        <td><a href="{% url battle_info battle.pk %}">battle</a> with {% hero battle.opponent %}</td>
+                        <td style="background-color: {% ifequal battle.winner hero %}#d4eed0;{% else %}#eed4d0{% endifequal %}"><a href="{% url battle_info battle.pk %}">battle</a> with {% hero battle.opponent %}</td>
                     </tr>
                 {% endfor %}
             </table>
