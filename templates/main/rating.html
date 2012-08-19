@@ -24,7 +24,7 @@
                             {% ifequal type 'experience' %}
                                 {{ hero.experience }}
                             {% else %}
-                                {{ hero.power }}
+                                {{ hero.get_total_power }}
                             {% endifequal %}
 
                         </td>
