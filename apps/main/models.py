@@ -485,7 +485,7 @@ class Spell(models.Model):
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
         LM = int(math.ceil(initiator.level*0.1))
         att_lower = int(initiator.get_attentiveness()*0.1)
-        att_upper = int(math.ceil(initiator.get_attentiveness*0.1))
+        att_upper = int(math.ceil(initiator.get_attentiveness()*0.1))
         if self.type=='UnitBuf':
             UnitEffect(
                 unit=target,
