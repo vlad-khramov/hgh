@@ -192,6 +192,8 @@ class Unit(models.Model):
     attentiveness_github = models.IntegerField(default=0)
     charm_github = models.IntegerField(default=0)
 
+    life = models.IntegerField(default=0)
+    
     battle_target = models.ForeignKey('self', null=True, default=None)
 
     def _get_stat(self, stat):
@@ -216,6 +218,9 @@ class Unit(models.Model):
 
     def get_sum_stats_github(self):
         return self.attack_github+self.defence_github+self.attentiveness_github+self.charm_github
+
+    def get_max_life(self):
+        return self.get_defence()*2
 
 
     def update_from_response(self, response):
