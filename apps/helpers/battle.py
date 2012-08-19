@@ -39,6 +39,11 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
     #casting of spells must be before direct attacks
     # only units survived after spells do attack
 
+    # after casting delete empty entries from spellbook
+    Spell.objects.filter(cnt__lte=0).delete()
+    # and delete what was casted at this turn
+    CastingSpell.objects.filter(Q(spell__hero=hero1)|Q(spell__hero=hero2)).delete()
+
     defeated_units = []
     for unit in hero1_army+hero2_army:
         target = army_dict[unit.battle_target_id]
