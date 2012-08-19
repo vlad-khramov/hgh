@@ -183,6 +183,8 @@ class Unit(models.Model):
     attentiveness_github = models.IntegerField(default=0)
     charm_github = models.IntegerField(default=0)
 
+    battle_target = models.ForeignKey('self', null=True, default=None)
+
     def _get_stat(self, stat):
         """returns total value of stat by its name"""
         return getattr(self, stat+'_github') + getattr(self.hero, 'get_'+stat)()
@@ -272,7 +274,6 @@ class Battle(models.Model):
             return self.hero2_moved
         else:
             return False
-
 
 
 
