@@ -198,3 +198,12 @@ def postbattle(request):
         'result': result,
         'battle': battle
     })
+
+
+
+def battle_info(request, id=0):
+    battle = get_object_or_404(Battle.objects.select_related(), pk=id)
+
+    return render(request, 'main/battle_info.html', {
+        'battle': battle
+    })

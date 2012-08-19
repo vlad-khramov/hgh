@@ -19,7 +19,7 @@
             <table class="table">
                 {% for battle in battles %}
                     <tr>
-                        <td>battle with {% hero battle.opponent %}</td>
+                        <td><a href="{% url battle_info battle.pk %}">battle</a> with {% hero battle.opponent %}</td>
                     </tr>
                 {% endfor %}
             </table>
