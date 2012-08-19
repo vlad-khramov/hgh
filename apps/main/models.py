@@ -337,7 +337,21 @@ class Battle(models.Model):
         elif self.hero2==hero:
             self.hero2_moved = val
 
+class HeroEffect(models.Model):
+    """ Spell affecting hero for a period. """
+    hero = models.ForeignKey(Hero, related_name='active_effects')
+    duration = models.IntegerField(default=1)
+    
+    type = models.CharField(max_length=200)
+    param = models.CharField(max_length=50)
 
+class UnitEffect(models.Model):
+    """ Spell affecting unit for a period. """
+    unit = models.ForeignKey(Unit, related_name='active_effects')
+    duration = models.IntegerField(default=1)
+    
+    type = models.CharField(max_length=200)
+    param = models.CharField(max_length=50)
 
 
 class Spell(models.Model):
