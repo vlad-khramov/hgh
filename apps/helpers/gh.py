@@ -1,6 +1,19 @@
 # coding: utf-8
 from github import Github
 
+def get_events(login):
+    """ Returns events of user as list of dict """
+    g = Github()
+    try:
+        events = g.get_user(login).get_events()
+    except Exception:
+        return []
+    returned_dicts = []
+    for event in events:
+        returned_dicts.append( dict([(key[1:],val) for key,val in event.__dict__.iteritems()]) )
+
+    return returned_dicts
+
 def get_repos(login):
     """ Returns repositories of user as list of dict """
     g = Github()
