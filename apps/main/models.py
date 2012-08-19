@@ -169,6 +169,9 @@ class Hero(models.Model):
             min_stat+'_own', 
             getattr(self, min_stat+'_own')+LM
         )
+    
+    def has_got_level(self):
+        return self.experience >= formulas.dsu(self.level)
 
     def update_army(self):
         """
