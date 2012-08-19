@@ -3,7 +3,7 @@ from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
 from apps.main.models import Unit
 
-def check_defeat(army): 
+def check_defeat(army):
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
     return all([unit.life <= 0 for unit in army])
 
@@ -42,6 +42,7 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
     #casting of spells must be before direct attacks
     # only units survived after spells do attack
 
+    defeated_units = []
     for unit in hero1_army+hero2_army:
         target = army_dict[unit.battle_target_id]
         if target.life<=0:
@@ -51,10 +52,13 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
             target.life -= damage
             battle.add_log_line_hits(unit.custom_name, target.custom_name, damage)
             if target.life<=0:
-                battle.add_log_line_unit_defeated(target.custom_name)
+                defeated_units.append(target)
             target.changed = True
         else:
             battle.add_log_line_missing(unit.custom_name, target.custom_name)
+
+    for unit in defeated_units:
+        battle.add_log_line_unit_defeated(unit.custom_name)
 
 
     hero1_defeated = check_defeat(hero1_army)
