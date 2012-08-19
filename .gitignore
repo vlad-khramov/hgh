@@ -4,3 +4,7 @@
 local_settings.py
 .idea
 *.sqlite
+*.project
+*.pydevproject
+.settings/*
+build/*

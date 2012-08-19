@@ -75,7 +75,8 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         # decreasing duration of effects and eliminating ones that ended
         HeroEffect.objects.filter(Q(hero=hero1)|Q(hero=hero2)).update(duration=F('duration')-1)
         HeroEffect.objects.filter(duration__lte=0).delete()
-        UnitEffect.objects.filter(unit__in=(hero1.units.filter(life_gt = 0)|hero2.units.filter(life_gt = 0)))
+        UnitEffect.objects.filter(unit__in=(hero1.units.filter(life_gt=0)|hero2.units.filter(life_gt=0))).update(duration=F('duration')-1)
+        UnitEffect.objects.filter(duration__lte=0).delete()
         for unit in hero1_army+hero2_army:
             if hasattr(unit, 'changed'):
                 unit.save()
