@@ -341,6 +341,43 @@ class Battle(models.Model):
         elif self.hero2==hero:
             self.hero2_moved = val
 
+    def add_log_line(self, line):
+        self.log = "%s\n%s" % (line, self.log)
+
+    def add_log_line_missing(self, unit1, unit2):
+        strings = (
+            '<b>%(unit1)s</b> missed <b>%(unit2)s</b>',
+            '<b>%(unit2)s</b> skilfully dodged from <b>%(unit1)s</b>\'s awkward attack'
+        )
+        self.add_log_line(random.choice(strings) % {
+            'unit1': unit1,
+            'unit2': unit2
+        })
+
+    def add_log_line_hits(self, unit1, unit2, damage):
+        strings = (
+            '<b>%(unit1)s</b> dealed to <b>%(unit2)s</b> %(damage)s damage',
+            '<b>%(unit2)s</b> loses %(damage)s hit points because of <b>%(unit1)s\'s</b> punch',
+            '<b>%(unit1)s</b> says "Baby don\'t hurt, don\'t hurt me, no more" and hurt <b>%(unit2)s</b> for %(damage)s hp',
+        )
+
+        self.add_log_line(random.choice(strings) % {
+            'unit1': unit1,
+            'unit2': unit2,
+            'damage': damage
+        })
+
+    def add_log_line_hero_defeated(self, hero):
+        strings = (
+            '<b>%s</b> defeated',
+        )
+
+        self.add_log_line(random.choice(strings) % hero)
+
+    def add_log_line_new_round(self):
+        self.add_log_line('=========== Round %s ===========' % self.round)
+
+
 class HeroEffect(models.Model):
     """ Spell affecting hero for a period. """
     hero = models.ForeignKey(Hero, related_name='active_effects')
