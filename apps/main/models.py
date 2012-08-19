@@ -439,9 +439,21 @@ class Spell(models.Model):
                 target.life -= random.randint(1, LM*2*att_upper)
                 target.save()
         elif self.type=='Fireball':
+            dmg = random.randint(int(LM*1.5), int(LM*1.7*att_upper))        
             if not target.is_immune_to(self):
-                target.life -= random.randint(int(LM*1.5), int(LM*1.7*att_upper))
+                target.life -= dmg
                 target.save()
+            pos_in_army = opponent_army.index(target)
+            if pos_in_army>0:
+                target_upper = opponent_army[pos_in_army-1]
+                if not target_upper.is_immune_to(self):
+                    target_upper.life -= int(dmg/2)
+                    target_upper.save()
+            if pos_in_army<len(opponent_army)-1:
+                target_lower = opponent_army[pos_in_army+1]
+                if not target_lower.is_immune_to(self):
+                    target_lower.life -= int(dmg/2)
+                    target_lower.save()
             
  
 
