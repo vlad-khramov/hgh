@@ -306,6 +306,9 @@ class Battle(models.Model):
     hero1_moved = models.BooleanField(default=False)
     hero2_moved = models.BooleanField(default=False)
 
+    hero1_seen_result = models.BooleanField(default=False)
+    hero2_seen_result = models.BooleanField(default=False)
+
     date = models.DateTimeField()
 
     is_active = models.BooleanField()
