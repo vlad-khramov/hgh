@@ -4,11 +4,7 @@ from apps.main.models import Unit
 
 def check_defeat(army):
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
-    for unit in army:
-        if unit.life > 0:
-            return False
-            break
-    return True
+    return any([unit.life > 0 for unit in army])
 
 def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
     """ Ends battle with loosing of one or more heroes"""
@@ -42,7 +38,8 @@ def battle_result_hero_defeated(battle, hero, opponent, opponent_defeated):
 def process_move(battle, hero1, hero2, hero1_army, hero2_army):
     """ Calcs result of move """
     army_dict = dict([(unit.pk,unit) for unit in hero1_army+hero2_army])
-
+    #casting of spells must be before direct attacks
+    # only units survived after spells do attack
 
     for unit in hero1_army+hero2_army:
         target = army_dict[unit.battle_target_id]
@@ -70,6 +67,10 @@ def process_move(battle, hero1, hero2, hero1_army, hero2_army):
         battle.add_log_line_new_round()
         battle.save()
         Unit.objects.filter(Q(hero=hero1)|Q(hero=hero2)).update(battle_target=None)
+        # decreasing duration of effects and eliminating ones that ended
+        HeroEffect.objects.filter(Q(hero=hero1)|Q(hero=hero2)).update(duration=F('duration')-1)
+        HeroEffect.objects.filter(duration<=0).delete()
+        #here will be unit effects
         for unit in hero1_army+hero2_army:
             if hasattr(unit, 'changed'):
                 unit.save()
