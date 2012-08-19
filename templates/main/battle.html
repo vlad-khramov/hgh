@@ -1,9 +1,24 @@
 {% extends 'base.html' %}
+{% load hero_main_info %}
 
 
 {% block content %}
     <div class="row center">
         <a href="{% url battle %}?runaway" class="btn btn-large">Run away</a>
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            {% include 'main/battle/hero_info.html' %}
+        </div>
+        <div class="span4">
+            &nbsp;
+        </div>
+        <div class="span4 pull-right">
+            {% with hero=opponent %}
+                {% include 'main/battle/hero_info.html' %}
+            {% endwith %}
+        </div>
     </div>
 
 

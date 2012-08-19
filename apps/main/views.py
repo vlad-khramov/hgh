@@ -104,7 +104,11 @@ def battle(request):
 
         return redirect('profile')
 
-    return render(request, 'main/battle.html',{'hero':request.user.hero})
+    return render(request, 'main/battle.html', {
+        'hero':request.user.hero,
+        'opponent':battle.get_opponent(request.user.hero),
+        'is_moved':battle.is_moved(request.user.hero)
+    })
 
 @login_required
 @check_battle
