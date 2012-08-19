@@ -2,7 +2,7 @@
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from apps.helpers.formulas import get_hit_chance, is_hits, get_damage, get_exp
-from apps.main.models import Unit, HeroEffect, UnitEffect, CastingSpell, HeroLog
+from apps.main.models import Unit, HeroEffect, UnitEffect, CastingSpell, HeroLog, Spell
 
 def check_defeat(army):
     """ Checks defeat of hero in battle or not. Hero defeated if his army is defeated"""
