@@ -1,12 +1,12 @@
 from github import Github
 
 def get_repos(login):
-    """returns repositories of user as list of dict"""
+    """ Returns repositories of user as list of dict """
     g = Github()
     try:
         repos = g.get_user(login).get_repos()
     except Exception:
-        return []
+        return {}
     repos = [repo for repo in repos if repo.fork == False]
 
     returned_dicts = []
@@ -14,3 +14,14 @@ def get_repos(login):
         returned_dicts.append( dict([(key[1:],val) for key,val in repo.__dict__.items()]) )
 
     return returned_dicts
+
+
+def get_user(login):
+    """ Returns info about github user as dict """
+    g = Github()
+    try:
+        user = g.get_user(login)
+    except Exception:
+        return {}
+
+    return dict([(key[1:],val) for key,val in user.__dict__.items()])
