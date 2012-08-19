@@ -31,6 +31,11 @@ def login(request):
 
     return render(request, 'main/login.html',{})
 
+def login_error(request):
+
+    return render(request, 'main/login_error.html',{})
+
+
 def rating(request, type=''):
 
     if type=='experience':

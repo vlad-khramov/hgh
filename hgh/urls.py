@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 
     url(r'^login/$', 'apps.main.views.login', name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page':'/'}, name='logout'),
+    url(r'^error_url/$', 'apps.main.views.login_error', name='login_error'),
+
 
     url(r'^$', 'apps.main.views.home', name='home'),
     url(r'^rating/experience/$', 'apps.main.views.rating', {'type':'experience'}, name='rating_exp'),
