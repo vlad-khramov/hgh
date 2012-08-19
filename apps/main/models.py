@@ -382,6 +382,26 @@ class Battle(models.Model):
             'unit1': unit1,
             'unit2': unit2
         })
+        
+    def add_log_line_immune(self, attacker, defender):
+        strings = (
+            '<b>%(def)s</b> ignores <b>%(at)s</b>\'s attack',
+            '<b>%(at)s</b> cannot hurt <b>%(def)s</b> being blessed by Titans'
+        )
+        self.add_log_line(random.choice(strings) % {
+            'at': attacker,
+            'def': defender
+        })
+        
+    def add_log_line_damage_returned(self, attacker, defender, dmg):
+        strings = (
+            '<b>%(def)s</b> returns %(dmg)s points of damage to <b>%(at)s</b>',
+            '<b>%(at)s</b> is pricked by <b>%(def)s</b>\'s thorns for %(dmg)s damage'
+        )
+        self.add_log_line(random.choice(strings) % {
+            'at': attacker,
+            'def': defender
+        })
 
     def add_log_line_hits(self, unit1, unit2, damage):
         strings = (
