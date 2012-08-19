@@ -1,24 +1,30 @@
 {% extends 'base.html' %}
 {% load unitline %}
-{% load hero_main_info %}
+{% load hero %}
 
 
 {% block content %}
     <div class="row">
-        <div class="span1-5">
-            <img src="{{ hero.avatar_url }}">
+        <div class="span6">
+            {% include 'main/battle/hero_info.html' %}
+            <table class="table" style="margin-top: 20px;">
+                {% for unit in hero.units.all %}
+                    <tr>
+                        <td>{% unitline unit %}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
-        <div class="span10">
-            {% hero_main_info hero %}
+        <div class="span6">
+            <table class="table">
+                {% for battle in battles %}
+                    <tr>
+                        <td>battle with {% hero battle.opponent %}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
+
     </div>
-    <div class="row">
-        <table class="table" style="margin-top: 20px;">
-            {% for unit in hero.units.all %}
-                <tr>
-                    <td>{% unitline unit %}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+
 {% endblock %}

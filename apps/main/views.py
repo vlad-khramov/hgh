@@ -57,7 +57,14 @@ def profile(request):
 
 def info(request, login=''):
     hero = get_object_or_404(Hero, login=login)
-    return render(request, 'main/info.html', {'hero': hero})
+    battles = list(hero.get_battles().select_related().order_by('-date')[:20])
+    for battle in battles:
+        battle.opponent = battle.get_opponent(hero)
+
+    return render(request, 'main/info.html', {
+        'hero': hero,
+        'battles': battles
+    })
 
 @login_required
 @check_battle
