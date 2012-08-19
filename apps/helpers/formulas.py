@@ -2,6 +2,7 @@
 from __future__ import division
 
 from math import ceil, floor
+import random
 
 def get_hit_chance(attack, defence, missRequired=True):
     """ Computes hit chance [0..1] based on attack and defence stat """
@@ -14,6 +15,12 @@ def get_hit_chance(attack, defence, missRequired=True):
     if chance<0.05:
         chance = 0.05
     return chance
+
+def is_hits(attack, defence, missRequired=True):
+    """Check hits one unit another, or not"""
+    return random.random()<=get_hit_chance(attack, defence, missRequired)
+
+
 
 def get_damage(attack, defence):
     """ Returns damaged based on attack and defence stat values """
