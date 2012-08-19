@@ -412,8 +412,8 @@ class Spell(models.Model):
     
     def cast(self, initiator, initiator_army, opponent, opponent_army, target, param):
         LM = int(math.ceil(initiator.level*0.1))
-        att_lower = int(initiator.attentiveness*0.1)
-        att_upper = int(math.ceil(initiator.attentiveness*0.1))
+        att_lower = int(initiator.get_attentiveness()*0.1)
+        att_upper = int(math.ceil(initiator.get_attentiveness*0.1))
         if self.type=='UnitBuf':
             UnitEffect(
                 unit=target, 
@@ -476,10 +476,27 @@ class Spell(models.Model):
                         direction = 1 if (pos_in_army<int(armysize/2)) else -1
                     pos_in_army += direction
                     cur_target = opponent_army[pos_in_army]
-                            
-                        
-                
-            
+        elif self.type=='TitanSkin':
+            UnitEffect(
+                unit=target, 
+                duration=1,
+                type=self.type
+            ).save()
+        elif self.type=='Amnezia':
+            UnitEffect(
+                unit=target, 
+                duration=1,
+                type=self.type
+            ).save()
+        elif self.type=='ThornsAura':
+            UnitEffect(
+                unit=target, 
+                duration=get_spell_duration(
+                    initiator.level, initiator.get_attentiveness()
+                ), 
+                type=self.type
+            ).save()
+
  
 
 def social_auth_update_user(sender, user, response, details, **kwargs):
