@@ -283,8 +283,8 @@ class Unit(models.Model):
 
     def is_immune_to(self, spell):
         if self.active_effects.filter(type='TitanSkin').count()>0:
-            return true
-        return false
+            return True
+        return False
 
     def save(self, *args, **kwargs):
         self.attack_github = int(self.forks/2)
@@ -304,6 +304,12 @@ class Event(models.Model):
     
     type = models.CharField(max_length=50)
     date = models.DateTimeField()
+
+class HeroLog(models.Model):
+    hero = models.ForeignKey(Hero, related_name='log')
+
+    date = models.DateTimeField()
+    text = models.CharField(max_length=255)
 
 class BattleQueue(models.Model):
     """Queue of heroes, waiting battle"""
