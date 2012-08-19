@@ -10,6 +10,9 @@ def hero_main_info(context, hero):
         %s<br>
         %s<br><br>
 
+        Wins: %s<br>
+        Defeats: %s<br><br>
+
         Attack: %s<br>
         Defence: %s<br>
         Attentiveness: %s<br>
@@ -18,6 +21,8 @@ def hero_main_info(context, hero):
         hero.login,
         hero.name,
         hero.race,
+        hero.wins,
+        hero.losses,
         hero.get_attack(),
         hero.get_defence(),
         hero.get_attentiveness(),
