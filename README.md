@@ -3,6 +3,8 @@ Heroes of Git and Hub
 
 Heroes of Git and Hub is a game where you become a hero leading army of your Github repositories to glorious victories. Demo version is available at http://hgh.dev8.ru
 
+The source code is distributed under [GPLv2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) licence.
+
 
 Installation
 ------------
